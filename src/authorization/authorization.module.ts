@@ -5,6 +5,7 @@ import { AuthorizationService } from './authorization.service';
 import { AuthorizationController } from './authorization.controller'
 import { JwtModule } from '@nestjs/jwt';
 import { OAuthFactory } from './oauth.factory';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppleAuthService, GoogleAuthService } from './providers.service';
 
 @Module({
@@ -20,9 +21,15 @@ import { AppleAuthService, GoogleAuthService } from './providers.service';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User]),
-    JwtModule.register({
-      secret: 'test', 
-      signOptions: { expiresIn: '60m' }, // Время жизни токена
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   providers: [AuthorizationService, OAuthFactory, GoogleAuthService, AppleAuthService],

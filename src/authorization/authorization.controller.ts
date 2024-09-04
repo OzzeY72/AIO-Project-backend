@@ -38,7 +38,7 @@ export class AuthorizationController {
         @Body('provider') provider: string,
         @Res() res: Response
     ) {
-        //try {
+        try {
             if(grantType !== 'authorization_code') return res.status(HttpStatus.BAD_REQUEST).json({ error: "Unsupported grant_type" });
             this.authorizationService.ClientCredentialsVerify(clientId, clientSecret);
 
@@ -61,9 +61,9 @@ export class AuthorizationController {
                 token_type: 'Bearer',
             });
 
-        //} catch (error) {
-           // return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
-        //}
+        } catch (error) {
+            return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
         
         
     }

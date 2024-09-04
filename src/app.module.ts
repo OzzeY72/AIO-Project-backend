@@ -3,17 +3,25 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthorizationController } from './authorization/authorization.controller';
 import { AuthorizationModule } from './authorization/authorization.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
   imports: [
     AuthorizationModule,
-    ConfigModule.forRoot(),
-    JwtModule.register({
-      secret: 'test', 
-      signOptions: { expiresIn: '60m' }, // Время жизни токена
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AppController, AuthorizationController],
