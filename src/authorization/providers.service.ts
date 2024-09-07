@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
-export interface OpenID {
-    email: string,
-    name: string | null,
-    providerId: string,
-} 
+import { OpenID } from 'src/interfaces/openid';
 
 export interface OAuthProvider {
     getToken(authorizationCode: string): Promise<OpenID>;

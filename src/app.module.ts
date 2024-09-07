@@ -5,6 +5,7 @@ import { AuthorizationController } from './authorization/authorization.controlle
 import { AuthorizationModule } from './authorization/authorization.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from './user/user.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
       inject: [ConfigService],
     }),
+    UserModule,
   ],
   controllers: [AppController, AuthorizationController],
   providers: [AppService],

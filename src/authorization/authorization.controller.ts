@@ -3,12 +3,14 @@ import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthorizationService } from './authorization.service';
 import { OAuthFactory } from './oauth.factory';
+import { UserService } from 'src/user/user.service';
 
 @Controller('oauth')
 export class AuthorizationController {
     constructor(
         private readonly jwtService: JwtService,
         private readonly authorizationService: AuthorizationService,
+        private readonly userService: UserService,
         private readonly oauthFactory: OAuthFactory,
     ) {}
 
@@ -47,8 +49,8 @@ export class AuthorizationController {
             const openId = await authProvider.getToken(code);
 
             //Create new User ?
-            let user = await this.authorizationService.FindUser(provider, openId.providerId);
-            if ( !user ) user = await this.authorizationService.CreateUser(openId, provider);
+            let user = await this.userService.FindUser({provider: provider, providerId: openId.providerId});
+            if ( !user ) user = await this.userService.CreateUser(openId, provider);
             
             //Issue new token
             const accessToken = this.authorizationService.generateAccessToken(user.userId);

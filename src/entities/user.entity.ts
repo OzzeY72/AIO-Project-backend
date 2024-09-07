@@ -20,6 +20,9 @@ export class User {
     @Column()
     userId: string;
 
+    @Column()
+    logo: string
+
     @Column({ nullable: true })
     accessToken: string;
 
