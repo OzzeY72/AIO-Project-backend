@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { AuthorizationService} from './authorization.service';
+import { User } from '../entities/user.entity';
+import { AuthorizationService } from './authorization.service';
 import { AuthorizationController } from './authorization.controller'
 import { JwtModule } from '@nestjs/jwt';
 import { OAuthFactory } from './oauth.factory';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppleAuthService, GoogleAuthService } from './providers.service';
 import { JwtAuthGuard } from './jwt-auth.guard'
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { JwtAuthGuard } from './jwt-auth.guard'
       }),
       inject: [ConfigService],
     }),
+    UserService,
   ],
   providers: [AuthorizationService, OAuthFactory, GoogleAuthService, AppleAuthService, JwtAuthGuard],
   controllers: [AuthorizationController],
