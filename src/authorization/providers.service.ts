@@ -5,6 +5,7 @@ export interface OpenID {
     email: string,
     name: string | null,
     providerId: string,
+    userLogo: string
 } 
 
 export interface OAuthProvider {
@@ -49,6 +50,7 @@ export class GoogleAuthService implements OAuthProvider {
         email: userInfo.email,
         name: userInfo.name,
         providerId: userInfo.sub,
+        userLogo: userInfo.picture
     };
   }
 }
@@ -61,6 +63,7 @@ export class AppleAuthService implements OAuthProvider {
         email: 'test',
         name: 'test',
         providerId: 'test',
+        userLogo: 'test'
     };
   }
 }

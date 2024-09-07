@@ -21,6 +21,9 @@ export class User {
     userId: string;
 
     @Column({ nullable: true })
+    userLogo: string;
+
+    @Column({ nullable: true })
     accessToken: string;
 
     @Column({ nullable: true })

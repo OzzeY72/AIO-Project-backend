@@ -1,8 +1,9 @@
-import { Controller, Get, Query, Res, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Query, Res, Post, Body, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthorizationService } from './authorization.service';
 import { OAuthFactory } from './oauth.factory';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('oauth')
 export class AuthorizationController {
@@ -64,7 +65,17 @@ export class AuthorizationController {
         } catch (error) {
             return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
-        
-        
+    }
+    @Get('logo')
+    @UseGuards(JwtAuthGuard)
+    async logo(
+        @Req() request: any,
+        @Res() res: Response
+    ) {
+        const user = request.user as any; // Получаем декодированные данные из токена
+        const userId = user.sub; // Извлекаем 'sub' из данных токена
+
+        return res.status(200).json({ logo: (await this.authorizationService.FindUserById(userId)).userLogo });
+        return `This is a protected resource. User ID: ${userId}`;
     }
 }

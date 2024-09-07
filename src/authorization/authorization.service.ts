@@ -30,8 +30,16 @@ export class AuthorizationService {
         }
     }
     generateAccessToken(userId: string) {
-        const payload = { sub: userId, eat: new Date().getSeconds() + 3600 };
+        const payload = { sub: userId };
         return this.jwtService.sign(payload);
+    }
+    async validateToken(token: string): Promise<any> {
+        try {
+          const payload = this.jwtService.verify(token);
+          return payload;
+        } catch (error) {
+          throw new UnauthorizedException('Invalid token');
+        }
     }
     generateIdToken(userId: string, name: string, email: string) {
         const payload = { sub: userId, name: name, email: email };
@@ -40,6 +48,9 @@ export class AuthorizationService {
     async FindUser(provider: string,providerId: string): Promise<User | undefined> {
         return this.userRepository.findOneBy({ provider: provider, providerId: providerId });
     }
+    async FindUserById(userId): Promise<User | undefined> {
+        return this.userRepository.findOneBy({ userId: userId });
+    }
     async CreateUser( openId: OpenID, provider: string) {
         const user_db = this.userRepository.create({
             email: openId.email,
@@ -47,6 +58,7 @@ export class AuthorizationService {
             provider: provider,
             providerId: openId.providerId,
             userId: uuidv4(),
+            userLogo: openId.userLogo
         });
         return this.userRepository.save(user_db);
     }
