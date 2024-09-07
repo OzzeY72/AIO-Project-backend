@@ -20,9 +20,6 @@ export class User {
     @Column()
     userId: string;
 
-    @Column()
-    logo: string
-
     @Column({ nullable: true })
     userLogo: string;
 
@@ -41,4 +38,11 @@ export class User {
     @Column({ type: 'timestamp', nullable: true })
     lastLogin: Date;
 
+}
+
+export class UserDto {
+    email: string;
+    name: string;
+    userId: string;
+    userLogo: string;
 }

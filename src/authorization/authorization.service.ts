@@ -1,19 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthorizationCode } from '../entities/authorizationcode.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
-import { emit } from 'process';
-import { v4 as uuidv4 } from 'uuid';
-import { OpenID } from 'src/interfaces/openid';
 import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
 export class AuthorizationService {
     constructor (
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>,
         private readonly jwtService: JwtService,
     ) {}
     private validClients = [

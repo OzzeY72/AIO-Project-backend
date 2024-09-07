@@ -16,10 +16,11 @@ export class JwtAuthGuard implements CanActivate {
     const token = authHeader.split(' ')[1];  // Предполагаем формат "Bearer token"
 
     try {
-      const payload = this.jwtService.verify(token);  // Проверка токена
+      const payload = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});  // Проверка токена
       request.user = payload;  // Добавляем информацию о пользователе в запрос
       return true;
     } catch (error) {
+      console.log(error);
       throw new UnauthorizedException('Invalid token');
     }
   }

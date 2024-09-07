@@ -33,9 +33,8 @@ import { UserService } from 'src/user/user.service';
       }),
       inject: [ConfigService],
     }),
-    UserService,
   ],
-  providers: [AuthorizationService, OAuthFactory, GoogleAuthService, AppleAuthService, JwtAuthGuard],
+  providers: [AuthorizationService, OAuthFactory, GoogleAuthService, AppleAuthService, JwtAuthGuard, UserService],
   controllers: [AuthorizationController],
   exports: [AuthorizationService, OAuthFactory, JwtAuthGuard],
 })

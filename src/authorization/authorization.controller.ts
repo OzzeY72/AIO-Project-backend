@@ -9,7 +9,6 @@ import { UserService } from 'src/user/user.service';
 @Controller('oauth')
 export class AuthorizationController {
     constructor(
-        private readonly jwtService: JwtService,
         private readonly authorizationService: AuthorizationService,
         private readonly userService: UserService,
         private readonly oauthFactory: OAuthFactory,
@@ -57,6 +56,8 @@ export class AuthorizationController {
             const accessToken = this.authorizationService.generateAccessToken(user.userId);
             const idToken = this.authorizationService.generateIdToken(user.userId, user.name, user.email);
 
+            console.log(accessToken);
+
             res.json({
                 access_token: accessToken,
                 id_token: idToken,
@@ -67,17 +68,5 @@ export class AuthorizationController {
         } catch (error) {
             return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
-    }
-    @Get('logo')
-    @UseGuards(JwtAuthGuard)
-    async logo(
-        @Req() request: any,
-        @Res() res: Response
-    ) {
-        const user = request.user as any; // Получаем декодированные данные из токена
-        const userId = user.sub; // Извлекаем 'sub' из данных токена
-
-        return res.status(200).json({ logo: (await this.authorizationService.FindUserById(userId)).userLogo });
-        return `This is a protected resource. User ID: ${userId}`;
     }
 }
