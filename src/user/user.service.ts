@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User, UserDto } from '../entities/user.entity';
+import { User, UserDto } from './entities/user.entity';
 import { OpenID } from 'src/interfaces/openid';
 import { v4 as uuidv4 } from 'uuid';
 

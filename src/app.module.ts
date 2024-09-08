@@ -4,8 +4,11 @@ import { AppService } from './app.service';
 import { AuthorizationController } from './authorization/authorization.controller';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './user/user.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/entities/user.entity';
+import { HealthModule } from './health/health.module';
+import { Health, HealthRecord } from './health'
 
 
 @Module({
@@ -14,19 +17,24 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    JwtModule.registerAsync({
+    TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
-        },
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        entities: [User, Health, HealthRecord],
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
     UserModule,
+    HealthModule,
   ],
   controllers: [AppController, AuthorizationController],
   providers: [AppService],
-})
+})  
 export class AppModule {}
