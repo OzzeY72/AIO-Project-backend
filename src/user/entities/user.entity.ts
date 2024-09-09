@@ -18,7 +18,7 @@ export class User {
     @Column({ nullable: true })
     providerId: string;
 
-    @Column()
+    @Column({unique: true})
     userId: string;
 
     @Column({ nullable: true })
@@ -41,11 +41,4 @@ export class User {
 
     @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.health)
     healthRecords: HealthRecord[];
-}
-
-export class UserDto {
-    email: string;
-    name: string;
-    userId: string;
-    userLogo: string;
 }

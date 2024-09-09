@@ -8,8 +8,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { HealthModule } from './health/health.module';
-import { Health, HealthRecord } from './health'
-
+import { Health, HealthRecord, HealthStat, HealthRegister} from './health'
 
 @Module({
   imports: [
@@ -26,7 +25,7 @@ import { Health, HealthRecord } from './health'
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [User, Health, HealthRecord],
+        entities: [User, Health, HealthRecord, HealthStat, HealthRegister],
         synchronize: true,
       }),
       inject: [ConfigService],

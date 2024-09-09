@@ -1,9 +1,11 @@
 import { Controller, Get, Res, UseGuards, Req, HttpStatus } from '@nestjs/common';
-import { JwtAuthGuard } from '../authorization/jwt-auth.guard';
+import { JwtAuthGuard } from '../authorization/guards/jwt-auth.guard';
 import { UserService } from './user.service';
 import { Response } from 'express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { UserResponseDto } from './dto/response-user.dto';
 
-
+@ApiTags('user')
 @Controller('user')
 export class UserController {
     constructor(
@@ -11,11 +13,14 @@ export class UserController {
     ) {}
 
     @Get('info')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Get user DTO' })
+    @ApiResponse({ status: 200, description: 'UserResponseDto' })
     @UseGuards(JwtAuthGuard)
-    async logo(
+    async userInfo(
         @Req() request: any,
         @Res() res: Response
-    ) {
+    ): Promise<Response<UserResponseDto>>{
         const accessInfo = request.user as any;
         const userId = accessInfo.sub;
 

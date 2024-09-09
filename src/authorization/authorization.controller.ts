@@ -1,11 +1,14 @@
 import { Controller, Get, Query, Res, Post, Body, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { AuthorizationService } from './authorization.service';
-import { OAuthFactory } from './oauth.factory';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { AuthorizationService } from './services/authorization.service';
+import { OAuthFactory } from './factories/oauth.factory';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from 'src/user/user.service';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+
+@ApiTags('Authorization')
 @Controller('oauth')
 export class AuthorizationController {
     constructor(
@@ -15,6 +18,8 @@ export class AuthorizationController {
     ) {}
 
     @Get('authorize')
+    @ApiOperation({ summary: 'Authorize for access_code' })
+    @ApiResponse({ status: 200, description: 'access_code' })
     authorize(
         @Query('response_type') responseType: string,
         @Query('client_id') clientId: string,
@@ -31,6 +36,8 @@ export class AuthorizationController {
     }
 
     @Post('token')
+    @ApiOperation({ summary: 'Exchange access_code on tokens (access, refresh, openid)' })
+    @ApiResponse({ status: 200, description: 'access, refresh, openid tokens' })
     async token(
         @Body('grant_type') grantType: string,
         @Body('code') code: string,

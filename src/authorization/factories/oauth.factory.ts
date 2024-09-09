@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OAuthProvider, GoogleAuthService, AppleAuthService } from './providers.service';  
+import { OAuthProvider, GoogleAuthService, AppleAuthService } from '../services/providers.service';  
 
 @Injectable()
 export class OAuthFactory {
