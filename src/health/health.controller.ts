@@ -1,8 +1,11 @@
-import { Controller, Get, HttpStatus, Body, Post, Res, Query} from '@nestjs/common';
+import { Controller, Get, HttpStatus, Body, Post, Res, Query, UseGuards, Req} from '@nestjs/common';
 import { HealthService } from './health.service';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
+import { JwtAuthGuard } from '../authorization/guards/jwt-auth.guard';
 import { handleControllerError } from '../common/utils/error-wrapper';
+import { SubscribeDto } from './dto/subscribe.dto';
+import { HealthRecordDto } from './dto/health-record.dto';
 
 @ApiTags('health')
 @Controller('health')
@@ -13,25 +16,34 @@ export class HealthController {
 
     @Get('records')
     @ApiOperation({ summary: 'Get all streaks of certain user certain health' })
-    @ApiResponse({ status: 200, description: 'Array of HealthRecord' })
+    @ApiOkResponse({
+        description: 'List of health records',
+        type: [HealthRecordDto]
+    })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     async getRecords(
-        @Query('userId') userId: string,
+        @Req() request: any,
         @Query('healthId') healthId: number,
-    ) {
+    ): Promise<HealthRecordDto[]>  {
+        const userId = request.user.sub;
         return await this.healthService.getAllByUserAndHealth(userId, healthId);
     }
 
     @Post('subscribe')
     @ApiOperation({ summary: 'Subscribe user to a certain health' })
     @ApiResponse({ status: 200, description: 'Success' })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @ApiBody({ description: 'Data for subscribe', type: SubscribeDto })
     async registrateUser(
-        @Body('countPerDay') countPerDay: number,
-        @Body('userId') userId: string,
-        @Body('healthId') healthId: number,
+        @Body() subscribeDto: SubscribeDto,
+        @Req() request: any,
         @Res() res
     ) {
         return handleControllerError(res, async () => {
-            await this.healthService.registrateUserToHealth(countPerDay, userId, healthId);
+            const userId = request.user.sub;
+            await this.healthService.registrateUserToHealth(subscribeDto.countPerDay, userId, subscribeDto.healthId);
             return res.status(HttpStatus.OK).json({ message: 'User subscribed successfully' });
         });
     }  
@@ -39,12 +51,15 @@ export class HealthController {
     @Post('beginStreak')
     @ApiOperation({ summary: 'Create new streak' })
     @ApiResponse({ status: 200, description: '' })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     async beginHealthStreak(
-        @Body('userId') userId: string,
         @Body('healthId') healthId: number,
+        @Req() request: any,
         @Res() res
     ) {
         return handleControllerError(res, async () => {
+            const userId = request.user.sub;
             await this.healthService.beginHealthStreak(userId, healthId);
             return res.status(HttpStatus.OK).json({ message: 'Streak started successfully' });
         });
@@ -53,12 +68,15 @@ export class HealthController {
     @Post('endStreak')
     @ApiOperation({ summary: 'End existing streak' })
     @ApiResponse({ status: 200, description: '' })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     async endHealthStreak(
-        @Body('userId') userId: string,
         @Body('healthId') healthId: number,
+        @Req() request: any,
         @Res() res
     ) {
         return handleControllerError(res, async () => {
+            const userId = request.user.sub;
             await this.healthService.endHealthStreak(userId, healthId);
             return res.status(HttpStatus.OK).json({ message: 'Streak ended successfully' });
         });
@@ -66,6 +84,8 @@ export class HealthController {
 
     @Post('init')
     @ApiOperation({ summary: 'Create new record in health table' })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     async initHealth(
         @Body('name') name: string,
         @Body('description') description: string,

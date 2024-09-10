@@ -14,9 +14,9 @@ export class UserController {
 
     @Get('info')
     @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Get user DTO' })
     @ApiResponse({ status: 200, description: 'UserResponseDto' })
-    @UseGuards(JwtAuthGuard)
     async userInfo(
         @Req() request: any,
         @Res() res: Response

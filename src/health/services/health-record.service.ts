@@ -16,7 +16,9 @@ export class HealthRecordService {
         userId: string, 
         healthId: number
     ) {
-        return await this.healthRecordRepository.findAllByUserAndHealth(userId, healthId);
+        const data = await this.healthRecordRepository.findAllByUserAndHealth(userId, healthId);
+        data.at(data.length-1).streakEnd = new Date().toLocaleDateString();
+        return data;
     }
 
     async endExistingStreak (

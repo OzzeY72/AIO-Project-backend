@@ -10,11 +10,15 @@ import { HealthRecordRepository } from './repositories/health-record.repository'
 import { HealthRegisterRepository } from './repositories/health-register.repository';
 import { HealthStatRepository } from './repositories/health-stat.repository';
 import { UserModule } from 'src/user/user.module';
+import { AuthorizationModule } from 'src/authorization/authorization.module';
+import { JwtAuthModule } from 'src/jwtauth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Health, HealthRecord, HealthStat, HealthRegister]),
     UserModule,
+    AuthorizationModule,
+    JwtAuthModule
   ],
   providers: [
     HealthService, 
