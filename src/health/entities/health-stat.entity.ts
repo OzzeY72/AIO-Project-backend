@@ -1,14 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { Health } from './health.entity'
 import { User } from 'src/user';
 
 @Entity()
+@Unique(['user', 'health'])
 export class HealthStat {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ nullable: false, default: 0 })
-    days: number;
+    totalDays: number;
 
     @Column({ nullable: false, default: 0})
     longestStreak: number;

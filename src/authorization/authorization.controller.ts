@@ -73,6 +73,7 @@ export class AuthorizationController {
             });
 
         } catch (error) {
+            console.log(error.message);
             return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Health, HealthRecord} from '../';
+import { Health, HealthRecord, HealthRegister} from '../';
 import { User } from 'src/user';
 import { HealthRegisterRepository } from '../repositories/health-register.repository';
 
@@ -11,6 +11,10 @@ export class HealthRegisterService {
 
     async isRegistrated (userId: string, healthId: number) {
         return !!await this.healthRegisterRepository.findByUserAndHealth(userId,healthId);
+    }
+
+    async getAll(): Promise<HealthRegister[] | undefined> {
+        return await this.healthRegisterRepository.findAll();
     }
 
     async registerUser (

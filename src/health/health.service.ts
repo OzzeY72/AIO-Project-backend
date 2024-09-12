@@ -7,6 +7,7 @@ import { User } from 'src/user'
 import { HealthRegisterService } from './services/health-register.service';
 import { UserService } from 'src/user/user.service';
 import { throwServiceError } from 'src/common/utils/error-wrapper';
+import { HealthStatsService } from './services/health-stat.service'
 
 @Injectable()
 export class HealthService {
@@ -15,14 +16,21 @@ export class HealthService {
         private readonly healthRepository: Repository<Health>,
         private healthRegisterService: HealthRegisterService,
         private healthRecordService: HealthRecordService,
+        private healthStatsService: HealthStatsService,
         private userService: UserService,
     ) {}
 
     async getAllByUserAndHealth(
         userId: string, 
-        healthId: number
+        healthId: number,
+        month: number,
+        year: number,
     ) {
-        return await this.healthRecordService.findAllByUserAndHealth(userId, healthId);
+        return await this.healthRecordService.findAllByUserAndHealth(userId, healthId, month, year);
+    }
+
+    async testUpdate() {
+        await this.healthStatsService.updateUserStats();
     }
 
     //Code for registrate endpoint
@@ -74,6 +82,6 @@ export class HealthService {
             name: name,
             description: description
         });
-        this.healthRepository.insert(newHealth);
+        await this.healthRepository.insert(newHealth);
     }
 }

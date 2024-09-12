@@ -104,6 +104,22 @@
             "schema": {
               "type": "number"
             }
+          },
+          {
+            "name": "month",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "year",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -221,6 +237,21 @@
           }
         ]
       }
+    },
+    "/health/test": {
+      "post": {
+        "operationId": "HealthController_testHealth",
+        "summary": "Test midnight stat update",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
     }
   },
   "info": {
@@ -248,10 +279,12 @@
             "description": "Id of healthrercord"
           },
           "streakBegin": {
+            "format": "date-time",
             "type": "string",
             "description": "Day of begging of streak"
           },
           "streakEnd": {
+            "format": "date-time",
             "type": "string",
             "description": "Day of streak ending"
           }

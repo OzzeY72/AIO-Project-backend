@@ -10,6 +10,7 @@ import { HealthRecordRepository } from './repositories/health-record.repository'
 import { HealthRegisterRepository } from './repositories/health-register.repository';
 import { HealthStatRepository } from './repositories/health-stat.repository';
 import { UserModule } from 'src/user/user.module';
+import { HealthStatsService } from './services/health-stat.service';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { JwtAuthModule } from 'src/jwtauth.module';
 
@@ -27,6 +28,7 @@ import { JwtAuthModule } from 'src/jwtauth.module';
     HealthRecordRepository, 
     HealthRegisterRepository,
     HealthStatRepository,
+    HealthStatsService,
   ],
   controllers: [HealthController]
 })

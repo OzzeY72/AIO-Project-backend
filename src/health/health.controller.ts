@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Body, Post, Res, Query, UseGuards, Req} from '@nestjs/common';
+import { Controller, Get, HttpStatus, Body, Post, Res, Query, UseGuards, Req, Param} from '@nestjs/common';
 import { HealthService } from './health.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -25,9 +25,12 @@ export class HealthController {
     async getRecords(
         @Req() request: any,
         @Query('healthId') healthId: number,
+        @Query('month') month?: number,
+        @Query('year') year?: number,
     ): Promise<HealthRecordDto[]>  {
         const userId = request.user.sub;
-        return await this.healthService.getAllByUserAndHealth(userId, healthId);
+        console.log(healthId, month, year);
+        return await this.healthService.getAllByUserAndHealth(userId, healthId, month, year);
     }
 
     @Post('subscribe')
@@ -92,5 +95,14 @@ export class HealthController {
     ) {
         await this.healthService.init(name, description);
         return {name,description};
+    }  
+
+    @Post('test')
+    @ApiOperation({ summary: 'Test midnight stat update' })
+    //@ApiBearerAuth()
+    //@UseGuards(JwtAuthGuard)
+    async testHealth() {
+        await this.healthService.testUpdate();
+        return "TEST";
     }  
 }

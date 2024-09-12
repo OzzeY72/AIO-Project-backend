@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { HealthRecord } from '../entities/health-record.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,17 +14,22 @@ export class HealthRecordRepository {
 
     async findAllByUserAndHealth(
         userId: string, 
-        healthId: number
+        healthId: number,
+        month: number,
+        year: number,
     ) {
+        const startOfMonth = month ? new Date(year, month - 1, 1) : new Date(2000,0,1);
+        const endOfMonth = month ? new Date(year, month, 0) : new Date(2200,0,1); 
         return await this.repository.find({
             where: {
-                user: {userId: userId},
-                health: {id: healthId}
-            }
+                user: { userId: userId },
+                health: { id: healthId },
+                streakBegin: Between(startOfMonth, endOfMonth),
+            },
         });
     }
 
-    async findByStreakEnd(streakEnd: string | null, userId: string, healthId: number): Promise<HealthRecord | undefined> {
+    async findByStreakEnd(streakEnd: Date | null, userId: string, healthId: number): Promise<HealthRecord | undefined> {
         return await this.repository.findOne({ 
             where: {
                 streakEnd: streakEnd,
@@ -54,12 +59,12 @@ export class HealthRecordRepository {
     }
 
     async createNewStreak(
-        streakStart: string | undefined, 
-        streakEnd: string | null, 
+        streakStart: Date | undefined, 
+        streakEnd: Date | null, 
         user: User, 
         health: Health
     ): Promise<HealthRecord> {
-        let streakBegin = streakStart ? streakStart : new Date().toLocaleDateString();
+        let streakBegin = streakStart ? streakStart : new Date();
         const healthRecord = await this.repository.create({
             streakBegin, 
             streakEnd,

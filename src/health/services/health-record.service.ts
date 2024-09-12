@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HealthRecordRepository } from '../repositories/health-record.repository'
 import { HealthRegisterRepository } from '../repositories/health-register.repository';
+import { HealthRecordDto } from '../dto/health-record.dto';
 
 @Injectable()
 export class HealthRecordService {
@@ -14,11 +15,13 @@ export class HealthRecordService {
 
     async findAllByUserAndHealth(
         userId: string, 
-        healthId: number
+        healthId: number,
+        month?: number,
+        year?: number,
     ) {
-        const data = await this.healthRecordRepository.findAllByUserAndHealth(userId, healthId);
-        data.at(data.length-1).streakEnd = new Date().toLocaleDateString();
-        return data;
+        if(!year) year = new Date().getFullYear();
+        const records = await this.healthRecordRepository.findAllByUserAndHealth(userId, healthId, month, year);
+        return records.map(this.toHealthRecordDto);
     }
 
     async endExistingStreak (
@@ -27,7 +30,7 @@ export class HealthRecordService {
     ) {
         const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(user.userId, health.id);
         if (!lastStreak.streakEnd) {
-            lastStreak.streakEnd = new Date().toLocaleDateString();
+            lastStreak.streakEnd = new Date();
             //we won't store junk record with < 1 day 
             if (lastStreak.streakBegin === lastStreak.streakEnd) {
                 await this.healthRecordRepository.deleteStreak(lastStreak.id);
@@ -36,17 +39,17 @@ export class HealthRecordService {
             }
         } else {
             //throw new Error 
-            console.log('No continuous streaks');
+            console.error('No continuous streaks');
         }
     }
 
     async createNewStreak (
-        streakStart: string | undefined, 
-        streakEnd: string | null, 
+        streakStart: Date | undefined, 
+        streakEnd: Date | null, 
         user: User, 
         health: Health
     ) {
-        if (!streakStart) streakStart = new Date().toLocaleDateString();
+        if (!streakStart) streakStart = new Date();
         const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(user.userId, health.id);
         if (
             !lastStreak ||
@@ -67,6 +70,38 @@ export class HealthRecordService {
             console.log('Continuous streak exist !');
         }
     }
+
+    async calculateUserStats(userId: string, healthId: number): Promise<{ totalDays: number, longestStreak: number }> {
+        const records = await this.findAllByUserAndHealth(userId, healthId);
+        
+        let totalDays = 0;
+        let longestStreak = 0;
+        let currentStreak = 0;
+        
+        records.forEach(record => {
+            const streakDays = this.calculateDaysBetween(record.streakBegin, record.streakEnd);
+            totalDays += streakDays;
+            currentStreak = Math.max(currentStreak, streakDays);
+        });
+        
+        longestStreak = currentStreak;
+        
+        return { totalDays, longestStreak };
+    }
+
+    calculateDaysBetween(start: Date, end: Date): number {
+        const startDate = new Date(start);
+        const endDate = new Date(end || new Date());
+        return Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    private toHealthRecordDto(healthRecord: HealthRecord): HealthRecordDto {
+        return {
+          id: healthRecord.id,
+          streakBegin: healthRecord.streakBegin,
+          streakEnd: healthRecord ? healthRecord.streakEnd : new Date(),
+        };
+      }
 }
 
 /*const today = new Date();

@@ -4,7 +4,7 @@
 /build
 
 todo.txt
-
+docker-compose.yml
 # Logs
 logs
 *.log

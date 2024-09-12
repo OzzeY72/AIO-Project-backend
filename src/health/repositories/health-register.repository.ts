@@ -21,6 +21,13 @@ export class HealthRegisterRepository {
         });
     }
 
+    async findAll(): Promise<HealthRegister[] | undefined> {
+        return await this.repository.createQueryBuilder('healthRecord')
+            .leftJoinAndSelect('healthRecord.user', 'user') 
+            .leftJoinAndSelect('healthRecord.health', 'health') 
+            .getMany(); 
+    }
+
     async registrate( 
         countPerDay: number | null,
         user: User, 
