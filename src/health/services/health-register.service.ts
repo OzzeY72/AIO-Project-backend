@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Health, HealthRecord, HealthRegister} from '../';
 import { User } from 'src/user';
-import { HealthRegisterRepository } from '../repositories/health-register.repository';
+import { Health, HealthRecord, HealthRegister, HealthRegisterRepository } from '..';
 
 @Injectable()
 export class HealthRegisterService {
@@ -19,11 +18,11 @@ export class HealthRegisterService {
 
     async registerUser (
         countPerDay: number | null,
-        user: User, 
-        health: Health
+        userId: string, 
+        healthId: number
     ) {
-        if(!await this.isRegistrated(user.userId, health.id)) {
-            await this.healthRegisterRepository.registrate(countPerDay,user, health);
+        if(!await this.isRegistrated(userId, healthId)) {
+            await this.healthRegisterRepository.registrate(countPerDay, userId, healthId);
         }
     }
 }

@@ -1,9 +1,8 @@
 import { Repository, Between } from 'typeorm';
-import { HealthRecord } from '../entities/health-record.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user';
-import { Health } from '../entities/health.entity';
+import { Health, HealthRecord } from '..';
 
 @Injectable()
 export class HealthRecordRepository {
@@ -61,15 +60,15 @@ export class HealthRecordRepository {
     async createNewStreak(
         streakStart: Date | undefined, 
         streakEnd: Date | null, 
-        user: User, 
-        health: Health
+        userId: string, 
+        healthId: number
     ): Promise<HealthRecord> {
         let streakBegin = streakStart ? streakStart : new Date();
         const healthRecord = await this.repository.create({
             streakBegin, 
             streakEnd,
-            user,
-            health
+            user: {userId: userId},
+            health: {id: healthId}
         });
         return await this.repository.save(healthRecord);
     }

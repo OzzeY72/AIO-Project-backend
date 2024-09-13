@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique } from 'typeorm';
-import { Health } from './health.entity'
+import { Health } from '..'
 import { User } from 'src/user';
 
 @Entity()

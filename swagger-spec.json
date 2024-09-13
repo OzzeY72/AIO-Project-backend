@@ -147,6 +147,45 @@
         ]
       }
     },
+    "/health/stat": {
+      "get": {
+        "operationId": "HealthController_getStats",
+        "summary": "Get all user stat",
+        "parameters": [
+          {
+            "name": "healthId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of health stats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HealthStatDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "health"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/health/subscribe": {
       "post": {
         "operationId": "HealthController_registrateUser",
@@ -293,6 +332,23 @@
           "id",
           "streakBegin",
           "streakEnd"
+        ]
+      },
+      "HealthStatDto": {
+        "type": "object",
+        "properties": {
+          "totalDays": {
+            "type": "number",
+            "description": "Total days of not doing something bad for health"
+          },
+          "longestStreak": {
+            "type": "number",
+            "description": "Longest streak"
+          }
+        },
+        "required": [
+          "totalDays",
+          "longestStreak"
         ]
       },
       "SubscribeDto": {

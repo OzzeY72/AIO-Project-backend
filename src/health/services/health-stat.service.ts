@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { HealthRegisterService } from './health-register.service';
-import { HealthRecordService } from './health-record.service';
-import { HealthStatRepository } from '../repositories/health-stat.repository';
+import { HealthRegisterService, HealthRecordService, HealthStatRepository, HealthStat, HealthStatDto } from '..';
 
 @Injectable()
 export class HealthStatsService {
@@ -11,6 +9,11 @@ export class HealthStatsService {
     private readonly healthRecordService: HealthRecordService,
     private readonly healthStatRepository: HealthStatRepository,
 ) {}
+
+  async getUserStat(userId: string, healthId) {
+    const stat = await this.healthStatRepository.findUserStat(userId, healthId);
+    return this.toHealthStatDto(stat);
+  } 
 
   // Запуск каждый день в 00:00
   @Cron('0 0 * * *')
@@ -26,4 +29,11 @@ export class HealthStatsService {
   async saveUserStats(userId: number, healthId: number, stats: { totalDays: number, longestStreak: number }) {
     return await this.healthStatRepository.saveUserStat(userId, healthId, stats);
   }
+
+  private toHealthStatDto(healthStat: HealthStat): HealthStatDto {
+    return {
+      totalDays: healthStat.totalDays,
+      longestStreak: healthStat.longestStreak
+    };
+}
 }

@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { HealthStat } from '../entities/health-stat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-
+import { HealthStat } from '..';
 //TODO
 
 @Injectable()
@@ -12,10 +11,10 @@ export class HealthStatRepository {
         private readonly repository: Repository<HealthStat>,
     ) {}
 
-  async findUserStat(userId: number, healthId: number): Promise<HealthStat | undefined> {
+  async findUserStat(userId: string, healthId: number): Promise<HealthStat | undefined> {
     return await this.repository.findOne({ 
       where: { 
-        user: { id: userId } ,
+        user: { userId: userId } ,
         health: { id: healthId }
       } 
     });

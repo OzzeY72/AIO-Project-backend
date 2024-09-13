@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Health, HealthRecord} from '../';
 import { User } from 'src/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HealthRecordRepository } from '../repositories/health-record.repository'
-import { HealthRegisterRepository } from '../repositories/health-register.repository';
-import { HealthRecordDto } from '../dto/health-record.dto';
+import { HealthRecordRepository, HealthRecordDto, Health, HealthRecord } from '..';
 
 @Injectable()
 export class HealthRecordService {
@@ -25,10 +22,10 @@ export class HealthRecordService {
     }
 
     async endExistingStreak (
-        user: User, 
-        health: Health
+        userId: string, 
+        healthId: number
     ) {
-        const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(user.userId, health.id);
+        const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(userId, healthId);
         if (!lastStreak.streakEnd) {
             lastStreak.streakEnd = new Date();
             //we won't store junk record with < 1 day 
@@ -46,11 +43,11 @@ export class HealthRecordService {
     async createNewStreak (
         streakStart: Date | undefined, 
         streakEnd: Date | null, 
-        user: User, 
-        health: Health
+        userId: string, 
+        healthId: number
     ) {
         if (!streakStart) streakStart = new Date();
-        const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(user.userId, health.id);
+        const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(userId, healthId);
         if (
             !lastStreak ||
             (
@@ -62,8 +59,8 @@ export class HealthRecordService {
             const healthRecord = await this.healthRecordRepository.createNewStreak(
                 streakStart,
                 null,
-                user,
-                health
+                userId,
+                healthId
             );
         } else {
             //throw new Error 
@@ -101,7 +98,7 @@ export class HealthRecordService {
           streakBegin: healthRecord.streakBegin,
           streakEnd: healthRecord ? healthRecord.streakEnd : new Date(),
         };
-      }
+    }
 }
 
 /*const today = new Date();

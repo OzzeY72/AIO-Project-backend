@@ -1,11 +1,9 @@
 import { Controller, Get, HttpStatus, Body, Post, Res, Query, UseGuards, Req, Param} from '@nestjs/common';
-import { HealthService } from './health.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { JwtAuthGuard } from '../authorization/guards/jwt-auth.guard';
 import { handleControllerError } from '../common/utils/error-wrapper';
-import { SubscribeDto } from './dto/subscribe.dto';
-import { HealthRecordDto } from './dto/health-record.dto';
+import { SubscribeDto, HealthRecordDto, HealthService, HealthStatDto } from '.';
 
 @ApiTags('health')
 @Controller('health')
@@ -31,6 +29,22 @@ export class HealthController {
         const userId = request.user.sub;
         console.log(healthId, month, year);
         return await this.healthService.getAllByUserAndHealth(userId, healthId, month, year);
+    }
+
+    @Get('stat')
+    @ApiOperation({ summary: 'Get all user stat' })
+    @ApiOkResponse({
+        description: 'List of health stats',
+        type: [HealthStatDto]
+    })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    async getStats(
+        @Req() request: any,
+        @Query('healthId') healthId: number,
+    ): Promise<HealthStatDto>  {
+        const userId = request.user.sub;
+        return await this.healthService.getUserStat(userId, healthId);
     }
 
     @Post('subscribe')
@@ -95,14 +109,5 @@ export class HealthController {
     ) {
         await this.healthService.init(name, description);
         return {name,description};
-    }  
-
-    @Post('test')
-    @ApiOperation({ summary: 'Test midnight stat update' })
-    //@ApiBearerAuth()
-    //@UseGuards(JwtAuthGuard)
-    async testHealth() {
-        await this.healthService.testUpdate();
-        return "TEST";
     }  
 }
