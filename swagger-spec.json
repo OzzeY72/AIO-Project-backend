@@ -167,10 +167,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HealthStatDto"
-                  }
+                  "$ref": "#/components/schemas/HealthStatDto"
                 }
               }
             }
@@ -274,21 +271,6 @@
           {
             "bearer": []
           }
-        ]
-      }
-    },
-    "/health/test": {
-      "post": {
-        "operationId": "HealthController_testHealth",
-        "summary": "Test midnight stat update",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "health"
         ]
       }
     }

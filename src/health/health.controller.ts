@@ -35,7 +35,7 @@ export class HealthController {
     @ApiOperation({ summary: 'Get all user stat' })
     @ApiOkResponse({
         description: 'List of health stats',
-        type: [HealthStatDto]
+        type: HealthStatDto,
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)

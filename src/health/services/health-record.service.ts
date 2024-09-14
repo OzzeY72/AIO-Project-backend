@@ -96,7 +96,7 @@ export class HealthRecordService {
         return {
           id: healthRecord.id,
           streakBegin: healthRecord.streakBegin,
-          streakEnd: healthRecord ? healthRecord.streakEnd : new Date(),
+          streakEnd: healthRecord.streakEnd ? healthRecord.streakEnd : new Date(),
         };
     }
 }
