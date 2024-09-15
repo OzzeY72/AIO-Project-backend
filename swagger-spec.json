@@ -167,7 +167,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HealthStatDto"
+                  "$ref": "#/components/schemas/CompleteStatDto"
                 }
               }
             }
@@ -316,7 +316,7 @@
           "streakEnd"
         ]
       },
-      "HealthStatDto": {
+      "CompleteStatDto": {
         "type": "object",
         "properties": {
           "totalDays": {
@@ -326,11 +326,32 @@
           "longestStreak": {
             "type": "number",
             "description": "Longest streak"
+          },
+          "lastBadDay": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last day with bad habit"
+          },
+          "lastStreakDays": {
+            "type": "number",
+            "description": "Days from begining of all streaks"
+          },
+          "badThingCount": {
+            "type": "number",
+            "description": "Bad thing count"
+          },
+          "moneySaved": {
+            "type": "number",
+            "description": "Money saved"
           }
         },
         "required": [
           "totalDays",
-          "longestStreak"
+          "longestStreak",
+          "lastBadDay",
+          "lastStreakDays",
+          "badThingCount",
+          "moneySaved"
         ]
       },
       "SubscribeDto": {

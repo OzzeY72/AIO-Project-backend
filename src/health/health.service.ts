@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { HealthRecordService } from './services/health-record.service'
 import { HealthRegisterService } from './services/health-register.service';
 import { HealthStatsService } from './services/health-stat.service'
+import { CompleteStatDto } from './dto/health-stat.dto';
 
 @Injectable()
 export class HealthService implements OnApplicationBootstrap {
@@ -30,8 +31,8 @@ export class HealthService implements OnApplicationBootstrap {
         return await this.healthRecordService.findAllByUserAndHealth(userId, healthId, month, year);
     }
 
-    async getUserStat (userId: string, healthId: number) {
-        return await this.healthStatsService.getUserStat(userId, healthId);
+    async getUserStat (userId: string, healthId: number): Promise<CompleteStatDto> {
+        return await this.healthStatsService.getCompleteUserStat(userId, healthId);
     }
     
     //Code for registrate endpoint

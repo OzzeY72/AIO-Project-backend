@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { JwtAuthGuard } from '../authorization/guards/jwt-auth.guard';
 import { handleControllerError } from '../common/utils/error-wrapper';
 import { SubscribeDto, HealthRecordDto, HealthService, HealthStatDto } from '.';
+import { CompleteStatDto } from './dto/health-stat.dto';
 
 @ApiTags('health')
 @Controller('health')
@@ -35,16 +36,18 @@ export class HealthController {
     @ApiOperation({ summary: 'Get all user stat' })
     @ApiOkResponse({
         description: 'List of health stats',
-        type: HealthStatDto,
+        type: CompleteStatDto,
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     async getStats(
         @Req() request: any,
         @Query('healthId') healthId: number,
-    ): Promise<HealthStatDto>  {
+    ): Promise<CompleteStatDto>  {
         const userId = request.user.sub;
-        return await this.healthService.getUserStat(userId, healthId);
+        const stat = await this.healthService.getUserStat(userId, healthId);
+        console.log(stat);
+        return stat;
     }
 
     @Post('subscribe')

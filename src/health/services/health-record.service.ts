@@ -3,6 +3,7 @@ import { User } from 'src/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HealthRecordRepository, HealthRecordDto, Health, HealthRecord } from '..';
+import { calculateDaysBetween } from '@/common/utils';
 
 @Injectable()
 export class HealthRecordService {
@@ -19,6 +20,14 @@ export class HealthRecordService {
         if(!year) year = new Date().getFullYear();
         const records = await this.healthRecordRepository.findAllByUserAndHealth(userId, healthId, month, year);
         return records.map(this.toHealthRecordDto);
+    }
+
+    async findLast(
+        userId: string, 
+        healthId: number,
+    ) {
+        const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(userId, healthId);
+        return this.toHealthRecordDto(lastStreak);
     }
 
     async endExistingStreak (
@@ -76,7 +85,7 @@ export class HealthRecordService {
         let currentStreak = 0;
         
         records.forEach(record => {
-            const streakDays = this.calculateDaysBetween(record.streakBegin, record.streakEnd);
+            const streakDays = calculateDaysBetween(record.streakBegin, record.streakEnd);
             totalDays += streakDays;
             currentStreak = Math.max(currentStreak, streakDays);
         });
@@ -84,12 +93,6 @@ export class HealthRecordService {
         longestStreak = currentStreak;
         
         return { totalDays, longestStreak };
-    }
-
-    calculateDaysBetween(start: Date, end: Date): number {
-        const startDate = new Date(start);
-        const endDate = new Date(end || new Date());
-        return Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     }
 
     private toHealthRecordDto(healthRecord: HealthRecord): HealthRecordDto {
