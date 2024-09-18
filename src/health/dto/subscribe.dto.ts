@@ -4,6 +4,9 @@ export class SubscribeDto {
   @ApiProperty({ description: 'Count of bad dozes per day' })
   countPerDay: number;
 
-  @ApiProperty({ description: 'Id of health' })
+  @ApiProperty({ description: 'Price per thing in USD' })
+  pricePerThing: number;
+
+  @ApiProperty({ description: 'Id of health', nullable: false})
   healthId: number;
 }

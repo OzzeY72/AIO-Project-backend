@@ -10,3 +10,8 @@ export class HealthRecordDto {
     @ApiProperty({ description: 'Day of streak ending' })
     streakEnd: Date;
 }
+
+export class HealthStreakDto {
+    @ApiProperty({ description: 'HealthId for manipulation with streaks' })
+    healthId: number;
+}

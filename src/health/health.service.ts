@@ -6,6 +6,8 @@ import { HealthRecordService } from './services/health-record.service'
 import { HealthRegisterService } from './services/health-register.service';
 import { HealthStatsService } from './services/health-stat.service'
 import { CompleteStatDto } from './dto/health-stat.dto';
+import { UserService } from '@/user/user.service';
+import { User } from '@/user';
 
 @Injectable()
 export class HealthService implements OnApplicationBootstrap {
@@ -38,22 +40,23 @@ export class HealthService implements OnApplicationBootstrap {
     //Code for registrate endpoint
     async registrateUserToHealth(
         countPerDay: number | null,
+        pricePerThing: number | null,
         userId: string, 
         healthId: number
     ) {
-        await this.healthRegisterService.registerUser(countPerDay, userId, healthId);
+        return await this.healthRegisterService.registerUser(countPerDay, pricePerThing, userId, healthId);
     }
     //Code for beginHealthStreak
     async beginHealthStreak(
         userId: string, 
         healthId: number
     ) {
-        if(await this.healthRegisterService.isRegistrated(userId, healthId)) {
+        //if(await this.healthRegisterService.isRegistrated(userId, healthId)) {
             await this.healthRecordService.createNewStreak(undefined,null,userId,healthId);
-        } else {
+        //} else {
            //throw new Error
-           console.log('User is not registrated');
-        }
+        //   console.log('User is not registrated');
+        //}
     }
     //Code for endHealthStreak
     async endHealthStreak(

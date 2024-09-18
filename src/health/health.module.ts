@@ -6,12 +6,14 @@ import { HealthRegisterService, HealthRecordRepository, HealthRegisterRepository
 import { UserModule } from 'src/user/user.module';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { JwtAuthModule } from 'src/jwtauth.module';
+import { UserService } from '@/user/user.service';
+import { User } from '@/user';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Health, HealthRecord, HealthStat, HealthRegister]),
+    TypeOrmModule.forFeature([Health, HealthRecord, HealthStat, HealthRegister, User]),
     AuthorizationModule,
-    JwtAuthModule
+    JwtAuthModule,
   ],
   providers: [
     HealthService, 

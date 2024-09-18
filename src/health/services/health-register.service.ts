@@ -24,17 +24,17 @@ export class HealthRegisterService {
 
     async registerUser (
         countPerDay: number | null,
+        pricePerThing: number | null,
         userId: string, 
         healthId: number
     ) {
-        if(!await this.isRegistrated(userId, healthId)) {
-            await this.healthRegisterRepository.registrate(countPerDay, userId, healthId);
-        }
+        return await this.healthRegisterRepository.registrate(countPerDay, pricePerThing, userId, healthId);
     }
 
     private toHealthRegisterDataDto(healthRegister: HealthRegister): HealthRegisterDataDto {
         return {
             countPerDay: healthRegister.countPerDay,
+            pricePerThing: healthRegister.pricePerThing,
         };
     }
 }

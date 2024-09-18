@@ -70,6 +70,8 @@ export class HealthRecordRepository {
             user: {userId: userId},
             health: {id: healthId}
         });
+        console.log(healthRecord);
+        console.log(healthRecord.user);
         return await this.repository.save(healthRecord);
     }
 }

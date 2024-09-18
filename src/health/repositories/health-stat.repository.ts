@@ -19,9 +19,9 @@ export class HealthStatRepository {
       } 
     });
   }
-  async saveUserStat(userId: number, healthId: number, stats: { totalDays: number, longestStreak: number }): Promise<HealthStat | undefined> {
+  async saveUserStat(userId: string, healthId: number, stats: { totalDays: number, longestStreak: number }): Promise<HealthStat | undefined> {
     const stat = this.repository.upsert({
-        user: {id: userId},
+        user: {userId: userId},
         health: {id: healthId},
         ...stats
     },

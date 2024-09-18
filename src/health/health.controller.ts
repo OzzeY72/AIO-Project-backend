@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiOkRespon
 import { Response } from 'express';
 import { JwtAuthGuard } from '../authorization/guards/jwt-auth.guard';
 import { handleControllerError } from '../common/utils/error-wrapper';
-import { SubscribeDto, HealthRecordDto, HealthService, HealthStatDto } from '.';
+import { SubscribeDto, HealthRecordDto, HealthService, HealthStatDto, HealthStreakDto } from '.';
 import { CompleteStatDto } from './dto/health-stat.dto';
 
 @ApiTags('health')
@@ -63,8 +63,13 @@ export class HealthController {
     ) {
         return handleControllerError(res, async () => {
             const userId = request.user.sub;
-            await this.healthService.registrateUserToHealth(subscribeDto.countPerDay, userId, subscribeDto.healthId);
-            return res.status(HttpStatus.OK).json({ message: 'User subscribed successfully' });
+            const register = await this.healthService.registrateUserToHealth(
+                subscribeDto.countPerDay, 
+                subscribeDto.pricePerThing, 
+                userId, 
+                subscribeDto.healthId
+            );
+            return res.status(HttpStatus.OK).json(register);
         });
     }  
 
@@ -73,6 +78,7 @@ export class HealthController {
     @ApiResponse({ status: 200, description: '' })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
+    @ApiBody({ description: 'Health to end streak', type: HealthStreakDto })
     async beginHealthStreak(
         @Body('healthId') healthId: number,
         @Req() request: any,
@@ -90,6 +96,7 @@ export class HealthController {
     @ApiResponse({ status: 200, description: '' })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
+    @ApiBody({ description: 'Health to end streak', type: HealthStreakDto })
     async endHealthStreak(
         @Body('healthId') healthId: number,
         @Req() request: any,

@@ -41,11 +41,11 @@ export class HealthStatsService {
     for (const register of registers) {
         const stats = await this.healthRecordService.calculateUserStats(register.user.userId, register.health.id);
         console.log(stats);
-        await this.saveUserStats(register.user.id, register.health.id, stats);
+        await this.saveUserStats(register.user.userId, register.health.id, stats);
     }
   }
 
-  async saveUserStats(userId: number, healthId: number, stats: { totalDays: number, longestStreak: number }) {
+  async saveUserStats(userId: string, healthId: number, stats: { totalDays: number, longestStreak: number }) {
     return await this.healthStatRepository.saveUserStat(userId, healthId, stats);
   }
 

@@ -29,19 +29,23 @@ export class HealthRegisterRepository {
 
     async registrate( 
         countPerDay: number | null,
+        pricePerThing: number | null,
         userId: string, 
         healthId: number
     ): Promise<HealthRegister> {
-        const registerRecord = await this.findByUserAndHealth(userId, healthId);
-        if (!registerRecord) {
-            const healthRegister = await this.repository.create({
-                countPerDay, 
-                user: {userId: userId},
-                health: {id: healthId}
-            });
-            return await this.repository.save(healthRegister);
-        } else {
-            return registerRecord;
-        }
+        console.log(
+            countPerDay,
+            pricePerThing,
+            userId,
+            healthId,
+        );
+        const healthRegister = await this.repository.create({
+            countPerDay, 
+            pricePerThing,
+            user: {id: 1, userId: userId},
+            health: {id: healthId}
+        });
+        const query = await this.repository.upsert(healthRegister,['user','health']);
+        return query.raw[0];
     }
 }
