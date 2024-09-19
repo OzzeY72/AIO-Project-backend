@@ -14,4 +14,13 @@ export class HealthRecordDto {
 export class HealthStreakDto {
     @ApiProperty({ description: 'HealthId for manipulation with streaks' })
     healthId: number;
+
+    @ApiProperty({ description: 'Create or Stop Streak ?' })
+    create: boolean;
 }
+
+export class HealthStreakResponseDto {
+    @ApiProperty({ description: 'Is there any existing streak for given healthId ?' })
+    isExist: boolean;
+}
+

@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiOkRespon
 import { Response } from 'express';
 import { JwtAuthGuard } from '../authorization/guards/jwt-auth.guard';
 import { handleControllerError } from '../common/utils/error-wrapper';
-import { SubscribeDto, HealthRecordDto, HealthService, HealthStatDto, HealthStreakDto } from '.';
+import { SubscribeDto, HealthRecordDto, HealthService, HealthStreakResponseDto, HealthStreakDto } from '.';
 import { CompleteStatDto } from './dto/health-stat.dto';
 
 @ApiTags('health')
@@ -73,24 +73,47 @@ export class HealthController {
         });
     }  
 
-    @Post('beginStreak')
-    @ApiOperation({ summary: 'Create new streak' })
+    @Post('streak')
+    @ApiOperation({ summary: 'Create or end streak' })
     @ApiResponse({ status: 200, description: '' })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    @ApiBody({ description: 'Health to end streak', type: HealthStreakDto })
-    async beginHealthStreak(
-        @Body('healthId') healthId: number,
+    @ApiBody({ description: 'Health to create or end streak', type: HealthStreakDto })
+    async toggleHealthStreak(
+        @Body() healthStreakBody: HealthStreakDto,
         @Req() request: any,
         @Res() res
     ) {
+        console.log("STREAK");
         return handleControllerError(res, async () => {
             const userId = request.user.sub;
-            await this.healthService.beginHealthStreak(userId, healthId);
-            return res.status(HttpStatus.OK).json({ message: 'Streak started successfully' });
+            await this.healthService.toggleHealthStreak(userId, healthStreakBody);
+            return res.status(HttpStatus.OK).json({ message: 'Streak toggled successfully' });
         });
     }
 
+    @Get('streak')
+    @ApiOperation({ summary: 'Is there any continous streak?' })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @ApiOkResponse({
+        description: 'Boolean meaning streak exist or doesnt',
+        type: HealthStreakResponseDto
+    })
+    async isStreakExist(
+        @Req() request: any,
+        @Query('healthId') healthId: number,
+        @Res() res
+    ): Promise<HealthStreakResponseDto> {
+        return handleControllerError(res, async () => {
+            const userId = request.user.sub;
+            const status = await this.healthService.isStreakExist(userId, healthId);
+            console.log(status);
+            return res.status(HttpStatus.OK).json(status);
+        });
+    }
+
+    /*
     @Post('endStreak')
     @ApiOperation({ summary: 'End existing streak' })
     @ApiResponse({ status: 200, description: '' })
@@ -107,7 +130,7 @@ export class HealthController {
             await this.healthService.endHealthStreak(userId, healthId);
             return res.status(HttpStatus.OK).json({ message: 'Streak ended successfully' });
         });
-    }
+    }*/
 
     @Post('init')
     @ApiOperation({ summary: 'Create new record in health table' })

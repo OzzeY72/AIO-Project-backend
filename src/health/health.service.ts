@@ -1,4 +1,4 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { HttpStatus, Injectable, OnApplicationBootstrap, HttpException } from '@nestjs/common';
 import { Health} from './';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,8 +6,7 @@ import { HealthRecordService } from './services/health-record.service'
 import { HealthRegisterService } from './services/health-register.service';
 import { HealthStatsService } from './services/health-stat.service'
 import { CompleteStatDto } from './dto/health-stat.dto';
-import { UserService } from '@/user/user.service';
-import { User } from '@/user';
+import { HealthStreakDto, HealthStreakResponseDto } from './';
 
 @Injectable()
 export class HealthService implements OnApplicationBootstrap {
@@ -18,6 +17,15 @@ export class HealthService implements OnApplicationBootstrap {
         private healthRecordService: HealthRecordService,
         private healthStatsService: HealthStatsService,
     ) {}
+
+    async verifyRegistration (
+        userId: string, 
+        healthId: number
+    ) {
+        if (!await this.healthRegisterService.isRegistrated(userId, healthId)) {
+            throw new HttpException('User is not registrated to health service', HttpStatus.FORBIDDEN);
+        }
+    }
 
     async onApplicationBootstrap() {
         await this.healthStatsService.updateUserStats();
@@ -47,28 +55,28 @@ export class HealthService implements OnApplicationBootstrap {
         return await this.healthRegisterService.registerUser(countPerDay, pricePerThing, userId, healthId);
     }
     //Code for beginHealthStreak
-    async beginHealthStreak(
+    async toggleHealthStreak(
         userId: string, 
-        healthId: number
+        healthStreakBody: HealthStreakDto
     ) {
-        //if(await this.healthRegisterService.isRegistrated(userId, healthId)) {
-            await this.healthRecordService.createNewStreak(undefined,null,userId,healthId);
-        //} else {
-           //throw new Error
-        //   console.log('User is not registrated');
-        //}
-    }
-    //Code for endHealthStreak
-    async endHealthStreak(
-        userId: string, 
-        healthId: number
-    ) {
-        if(this.healthRegisterService.isRegistrated(userId, healthId)) {
-            await this.healthRecordService.endExistingStreak(userId,healthId);
+        await this.verifyRegistration(userId, healthStreakBody.healthId);
+        if (healthStreakBody.create) {
+            return await this.healthRecordService.createNewStreak(userId, healthStreakBody.healthId);
         } else {
-            //throw new Error
-            console.log('User is not registrated');
+            return await this.healthRecordService.endExistingStreak(userId, healthStreakBody.healthId);
         }
+    }
+
+    async isStreakExist(
+        userId: string, 
+        healthId: number
+    ): Promise<HealthStreakResponseDto> {
+        await this.verifyRegistration(userId, healthId);
+        const isExist = await this.healthRecordService.isStreakExist(userId, healthId);
+        const status = {
+            isExist: isExist,
+        }
+        return status;
     }
 
     async init (name: string, description: string) {

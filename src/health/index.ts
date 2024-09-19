@@ -1,4 +1,4 @@
-import { HealthRecordDto, HealthStreakDto } from "./dto/health-record.dto";
+import { HealthRecordDto, HealthStreakDto, HealthStreakResponseDto } from "./dto/health-record.dto";
 import { HealthStatDto } from "./dto/health-stat.dto";
 import { SubscribeDto } from "./dto/subscribe.dto";
 
@@ -17,5 +17,5 @@ import { HealthStatsService } from "./services/health-stat.service";
 import { HealthService } from "./health.service";
 
 export { HealthRecordDto, HealthStatDto, HealthStreakDto, SubscribeDto, Health, HealthRecord, HealthStat, HealthRegister };
-export { HealthRegisterRepository, HealthRecordRepository, HealthStatRepository };
+export { HealthRegisterRepository, HealthRecordRepository, HealthStatRepository, HealthStreakResponseDto };
 export { HealthRecordService, HealthRegisterService, HealthStatsService, HealthService };

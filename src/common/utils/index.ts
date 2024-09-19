@@ -1,1 +1,1 @@
-export { calculateDaysBetween } from './date-utils';
+export { calculateDaysBetween, toClearDate } from './date-utils';

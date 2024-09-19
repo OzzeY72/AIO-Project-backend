@@ -3,7 +3,7 @@ import { User } from 'src/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HealthRecordRepository, HealthRecordDto, Health, HealthRecord } from '..';
-import { calculateDaysBetween } from '@/common/utils';
+import { calculateDaysBetween, toClearDate } from '@/common/utils';
 
 @Injectable()
 export class HealthRecordService {
@@ -25,9 +25,10 @@ export class HealthRecordService {
     async findLast(
         userId: string, 
         healthId: number,
+        raw?: boolean
     ) {
         const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(userId, healthId);
-        return this.toHealthRecordDto(lastStreak);
+        return raw ? lastStreak : this.toHealthRecordDto(lastStreak);
     }
 
     async endExistingStreak (
@@ -50,19 +51,20 @@ export class HealthRecordService {
     }
 
     async createNewStreak (
-        streakStart: Date | undefined, 
-        streakEnd: Date | null, 
         userId: string, 
-        healthId: number
+        healthId: number,
+        streakStart?: Date | undefined, 
+        streakEnd?: Date | null, 
     ) {
         if (!streakStart) streakStart = new Date();
-        const lastStreak = await this.healthRecordRepository.findLatestHealthRecord(userId, healthId);
+        streakStart = toClearDate(streakStart);
+        const lastStreak = await this.findLast(userId, healthId, true);
         if (
             !lastStreak ||
             (
                 lastStreak?.streakEnd && 
-                lastStreak?.streakEnd !== streakStart && 
-                lastStreak?.streakBegin !== streakStart
+                toClearDate(lastStreak?.streakEnd).getTime() !== streakStart.getTime() && 
+                toClearDate(lastStreak?.streakBegin).getTime() !== streakStart.getTime()
             )
         ) {
             const healthRecord = await this.healthRecordRepository.createNewStreak(
@@ -93,6 +95,14 @@ export class HealthRecordService {
         longestStreak = currentStreak;
         
         return { totalDays, longestStreak };
+    }
+
+    async isStreakExist (
+        userId: string, 
+        healthId: number
+    ): Promise<boolean> {
+        const lastStreak = await this.findLast(userId, healthId, true);
+        return lastStreak ? !lastStreak.streakEnd : false;
     }
 
     private toHealthRecordDto(healthRecord: HealthRecord): HealthRecordDto {
