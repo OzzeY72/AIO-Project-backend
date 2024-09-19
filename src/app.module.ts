@@ -9,6 +9,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { HealthModule } from './health/health.module';
 import { Health, HealthRecord, HealthStat, HealthRegister} from './health'
+import { BudgetController } from './budget/budget.controller';
+import { BudgetModule } from './budget/budget.module';
 
 @Module({
   imports: [
@@ -32,8 +34,9 @@ import { Health, HealthRecord, HealthStat, HealthRegister} from './health'
     }),
     HealthModule,
     UserModule,
+    BudgetModule,
   ],
-  controllers: [AppController, AuthorizationController],
+  controllers: [AppController, AuthorizationController, BudgetController],
   providers: [AppService],
 })  
 export class AppModule {}

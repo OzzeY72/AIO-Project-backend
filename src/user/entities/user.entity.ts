@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { HealthRecord } from 'src/health';
+import { ProductEntity } from '@/budget';
 
 @Entity()
 export class User {
@@ -39,6 +40,9 @@ export class User {
     @Column({ type: 'timestamp', nullable: true })
     lastLogin: Date;
 
-    @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.health)
+    @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.user)
     healthRecords: HealthRecord[];
+
+    @OneToMany(() => ProductEntity, (product) => product.user)
+    products: ProductEntity[];
 }
