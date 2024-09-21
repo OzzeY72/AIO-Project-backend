@@ -1,0 +1,1 @@
+export { AuthorizationCode } from './authorizationcode.entity';

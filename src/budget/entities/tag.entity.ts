@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique, ManyToMany, JoinTable } from 'typeorm';
-import { User } from '@/user';
+import { User } from '@/user/entities';
 import { ProductEntity, CategoryEntity } from '@/budget/entities';
 
 @Entity()

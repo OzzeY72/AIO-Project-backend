@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { HealthRegisterService, HealthRecordService, HealthStatRepository, HealthStat, HealthStatDto } from '..';
+import { HealthRegisterService, HealthRecordService } from '@/health/services';
+import { HealthStatDto, CompleteStatDto } from '@/health/dto';
+import { HealthStatRepository } from '@/health/repositories';
+import { HealthStat } from '@/health/entities';
 import { calculateDaysBetween } from '@/common/utils';
-import { CompleteStatDto } from '../dto/health-stat.dto';
 
 @Injectable()
 export class HealthStatsService {

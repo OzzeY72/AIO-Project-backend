@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
-import { HealthController } from './health.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HealthRecord, Health, HealthStat, HealthRecordService, HealthRegister, HealthStatsService, HealthService } from '.';
-import { HealthRegisterService, HealthRecordRepository, HealthRegisterRepository, HealthStatRepository } from '.';
-import { UserModule } from 'src/user/user.module';
-import { AuthorizationModule } from 'src/authorization/authorization.module';
-import { JwtAuthModule } from 'src/jwtauth.module';
-import { UserService } from '@/user/user.service';
-import { User } from '@/user';
+import { HealthRecord, Health, HealthStat,  HealthRegister } from '@/health/entities';
+import { HealthRecordService, HealthStatsService, HealthRegisterService } from '@/health/services';
+import { HealthRecordRepository, HealthRegisterRepository, HealthStatRepository } from '@/health/repositories';
+import { HealthService, HealthController } from '@/health';
+import { AuthorizationModule } from '@/authorization/authorization.module';
+import { JwtAuthModule } from '@/jwtauth.module';
+import { User } from '@/user/entities';
 
 @Module({
   imports: [

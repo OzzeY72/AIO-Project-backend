@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/user';
-import { Health, HealthRecord, HealthRegister, HealthRegisterRepository } from '..';
-import { HealthRegisterDataDto } from '../dto/health-register.dto';
+import { HealthRegister } from '@/health/entities';
+import { HealthRegisterRepository } from '@/health/repositories';
+import { HealthRegisterDataDto } from '@/health/dto';
 
 @Injectable()
 export class HealthRegisterService {

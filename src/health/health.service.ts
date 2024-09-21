@@ -1,12 +1,9 @@
 import { HttpStatus, Injectable, OnApplicationBootstrap, HttpException } from '@nestjs/common';
-import { Health} from './';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HealthRecordService } from './services/health-record.service'
-import { HealthRegisterService } from './services/health-register.service';
-import { HealthStatsService } from './services/health-stat.service'
-import { CompleteStatDto } from './dto/health-stat.dto';
-import { HealthStreakDto, HealthStreakResponseDto } from './';
+import { HealthRecordService, HealthRegisterService, HealthStatsService } from '@/health/services';
+import { HealthStreakDto, HealthStreakResponseDto, CompleteStatDto } from '@/health/dto';
+import { Health } from '@/health/entities';
 
 @Injectable()
 export class HealthService implements OnApplicationBootstrap {

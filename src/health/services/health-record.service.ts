@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { HealthRecordRepository, HealthRecordDto, HealthRecord } from '..';
+import { HealthRecordRepository } from '@/health/repositories';
+import { HealthRecord } from '@/health/entities';
+import { HealthRecordDto } from '@/health/dto';
 import { calculateDaysBetween, toClearDate } from '@/common/utils';
 
 @Injectable()

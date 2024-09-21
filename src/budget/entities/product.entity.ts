@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany } from 'typeorm';
-import { User } from 'src/user';
+import { User } from '@/user/entities';
 import { CategoryEntity, TagEntity } from '@/budget/entities';
 
 @Entity()

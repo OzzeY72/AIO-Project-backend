@@ -1,4 +1,3 @@
-import { User } from "./entities/user.entity";
-import { UserResponseDto } from "./dto/response-user.dto";
-
-export { User, UserResponseDto };
+export { UserModule } from './user.module';
+export { UserService } from './user.service';
+export { UserController } from './user.controller';

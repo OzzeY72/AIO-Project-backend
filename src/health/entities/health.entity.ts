@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { HealthRecord } from '..'
+import { HealthRecord } from '@/health/entities';
 
 @Entity()
 export class Health {

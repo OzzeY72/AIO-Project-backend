@@ -1,10 +1,10 @@
-import { Controller, Get, HttpStatus, Body, Post, Res, Query, UseGuards, Req, Param} from '@nestjs/common';
+import { Controller, Get, HttpStatus, Body, Post, Res, Query, UseGuards, Req} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
-import { JwtAuthGuard } from '../authorization/guards/jwt-auth.guard';
-import { handleControllerError } from '../common/utils/error-wrapper';
-import { SubscribeDto, HealthRecordDto, HealthService, HealthStreakResponseDto, HealthStreakDto } from '.';
-import { CompleteStatDto } from './dto/health-stat.dto';
+import { JwtAuthGuard } from '@/authorization';
+import { handleControllerError } from '@/common/utils';
+import { SubscribeDto, HealthRecordDto, HealthStreakResponseDto, HealthStreakDto, CompleteStatDto } from '@/health/dto';
+import { HealthService } from '@/health';
 
 @ApiTags('health')
 @Controller('health')
@@ -59,7 +59,7 @@ export class HealthController {
     async registrateUser(
         @Body() subscribeDto: SubscribeDto,
         @Req() request: any,
-        @Res() res
+        @Res() res:Response
     ) {
         return handleControllerError(res, async () => {
             const userId = request.user.sub;
@@ -82,7 +82,7 @@ export class HealthController {
     async toggleHealthStreak(
         @Body() healthStreakBody: HealthStreakDto,
         @Req() request: any,
-        @Res() res
+        @Res() res:Response
     ) {
         console.log("STREAK");
         return handleControllerError(res, async () => {
@@ -103,7 +103,7 @@ export class HealthController {
     async isStreakExist(
         @Req() request: any,
         @Query('healthId') healthId: number,
-        @Res() res
+        @Res() res:Response
     ): Promise<HealthStreakResponseDto> {
         return handleControllerError(res, async () => {
             const userId = request.user.sub;
@@ -123,7 +123,7 @@ export class HealthController {
     async endHealthStreak(
         @Body('healthId') healthId: number,
         @Req() request: any,
-        @Res() res
+        @Res() res:Response
     ) {
         return handleControllerError(res, async () => {
             const userId = request.user.sub;

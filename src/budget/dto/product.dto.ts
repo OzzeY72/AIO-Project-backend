@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TagDtoResponse, CategoryDtoResponse, toTagDtoResponse, toCategoryDtoResponse } from '@/budget/dto';
-import { ProductEntity } from '../entities';
+import { ProductEntity } from '@/budget/entities';
 
 export class ProductDtoResponse {
     @ApiProperty({ description: 'Id of product' })

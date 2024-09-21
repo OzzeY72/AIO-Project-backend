@@ -1,16 +1,15 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthorizationController } from './authorization/authorization.controller';
-import { AuthorizationModule } from './authorization/authorization.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user/entities/user.entity';
-import { HealthModule } from './health/health.module';
-import { Health, HealthRecord, HealthStat, HealthRegister} from './health'
-import { BudgetController } from './budget/budget.controller';
-import { BudgetModule } from './budget/budget.module';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AppController } from '@/app.controller';
+import { AppService } from '@/app.service';
+import { AuthorizationController, AuthorizationModule } from '@/authorization';
+import { UserModule } from '@/user';
+import { User } from '@/user/entities';
+import { HealthController, HealthModule } from '@/health';
+import { Health, HealthRecord, HealthStat, HealthRegister} from '@/health/entities';
+import { BudgetModule, BudgetController } from '@/budget';
+import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
 
 @Module({
   imports: [
@@ -27,7 +26,11 @@ import { BudgetModule } from './budget/budget.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [User, Health, HealthRecord, HealthStat, HealthRegister],
+        entities: [
+          User, 
+          Health, HealthRecord, HealthStat, HealthRegister,
+          ProductEntity, TagEntity, CategoryEntity,
+        ],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -36,7 +39,7 @@ import { BudgetModule } from './budget/budget.module';
     UserModule,
     BudgetModule,
   ],
-  controllers: [AppController, AuthorizationController, BudgetController],
+  controllers: [AppController, AuthorizationController, HealthController, BudgetController],
   providers: [AppService],
 })  
 export class AppModule {}

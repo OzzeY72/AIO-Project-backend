@@ -1,9 +1,7 @@
-import { Controller, Get, Query, Res, Post, Body, HttpStatus, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Query, Res, Post, Body, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
-import { JwtService } from '@nestjs/jwt';
 import { AuthorizationService } from './services/authorization.service';
 import { OAuthFactory } from './factories/oauth.factory';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
