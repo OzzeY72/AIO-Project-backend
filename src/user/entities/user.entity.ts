@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { HealthRecord } from 'src/health';
-import { ProductEntity } from '@/budget';
+import { HealthRecord } from '@/health/entities';
+import { ProductEntity } from '@/budget/entities';
 
 @Entity()
 export class User {

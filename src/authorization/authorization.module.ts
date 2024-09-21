@@ -12,8 +12,8 @@ import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
-    JwtAuthModule,
     UserModule,
+    JwtAuthModule,
     TypeOrmModule.forFeature([User]),
   ],
   providers: [AuthorizationService, OAuthFactory, GoogleAuthService, AppleAuthService, JwtAuthGuard],

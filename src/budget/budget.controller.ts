@@ -2,7 +2,7 @@ import { Controller, Get, Put, Body, Post, Res, UseGuards, Delete, Param} from '
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/authorization';
 import { handleControllerError } from '@/common/utils';
-import { BudgetService } from '@/budget/budget.service';
+import { BudgetService } from '@/budget';
 import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
 import { TagDtoRequest, TagDtoResponse } from '@/budget/dto';
 import { Response } from 'express';

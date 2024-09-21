@@ -10,9 +10,11 @@ import { HealthController, HealthModule } from '@/health';
 import { Health, HealthRecord, HealthStat, HealthRegister} from '@/health/entities';
 import { BudgetModule, BudgetController } from '@/budget';
 import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
+import { JwtAuthModule } from './jwtauth.module';
 
 @Module({
   imports: [
+    JwtAuthModule,
     AuthorizationModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -35,11 +37,9 @@ import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
       }),
       inject: [ConfigService],
     }),
-    HealthModule,
     UserModule,
-    BudgetModule,
   ],
-  controllers: [AppController, AuthorizationController, HealthController, BudgetController],
+  controllers: [AppController, AuthorizationController],
   providers: [AppService],
 })  
 export class AppModule {}
