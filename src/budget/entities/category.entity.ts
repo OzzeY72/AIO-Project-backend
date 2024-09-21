@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from 'typeorm';
-import { ProductEntity, TagEntity } from '@/budget';
+import { ProductEntity, TagEntity } from '@/budget/entities';
 
 @Entity()
 @Unique(['name'])

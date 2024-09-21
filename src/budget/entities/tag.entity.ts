@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique, ManyToMany, JoinTable } from 'typeorm';
 import { User } from '@/user';
-import { ProductEntity, CategoryEntity } from '@/budget';
+import { ProductEntity, CategoryEntity } from '@/budget/entities';
 
 @Entity()
 @Unique(['name'])

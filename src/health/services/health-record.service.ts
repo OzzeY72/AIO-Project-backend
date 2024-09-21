@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/user';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { HealthRecordRepository, HealthRecordDto, Health, HealthRecord } from '..';
+import { HealthRecordRepository, HealthRecordDto, HealthRecord } from '..';
 import { calculateDaysBetween, toClearDate } from '@/common/utils';
 
 @Injectable()
