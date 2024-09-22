@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { toProductDtoResponse, ProductDtoResponse, ProductDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
+import { toProductDtoResponse, ProductDtoResponse, ProductDtoRequest, ProductUpdateDtoRequest, ProductGetDtoRequest } from '@/budget/dto';
 import { ProductRepository } from '@/budget/repositories';
 import { ProductEntity } from '@/budget/entities';
 
@@ -17,6 +17,11 @@ export class ProductService {
     async getProduct (id: number): Promise<ProductDtoResponse> {
         const record = await this.productRepository.findProductById(id);
         return toProductDtoResponse(record);
+    }
+
+    async getProductsByOptions (options: ProductGetDtoRequest) {
+        const records = await this.productRepository.findProductsWithOptions(options);
+        return records.map(toProductDtoResponse);
     }
 
     async addProduct (product: ProductDtoRequest) {

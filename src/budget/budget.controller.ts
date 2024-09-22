@@ -1,8 +1,8 @@
-import { Controller, Get, Put, Body, Post, Res, UseGuards, Delete, Param, HttpStatus, Req} from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam } from '@nestjs/swagger';
+import { Controller, Get, Put, Body, Post, Res, UseGuards, Delete, Param, HttpStatus, Req, Query} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/authorization';
 import { handleControllerError } from '@/common/utils';
-import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
+import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductDtoResponse, ProductGetDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
 import { TagDtoRequest, TagDtoResponse } from '@/budget/dto';
 import { Response } from 'express';
 import { BudgetService } from '@/budget/services';
@@ -155,16 +155,23 @@ export class BudgetController {
 
     // Products
     @Get('product')
-    @ApiOperation({ summary: 'Get all products' })
+    @ApiOperation({ summary: 'Get all products with filter' })
+    @ApiQuery({ name: 'month', required: false, description: 'Filter by month' })
+    @ApiQuery({ name: 'year', required: false, description: 'Filter by year' })
+    @ApiQuery({ name: 'tags', required: false, description: 'Filter by tag' })
+    @ApiQuery({ name: 'category', required: false, description: 'Filter by category' })
     @ApiOkResponse({
         description: 'List of products',
         type: [ProductDtoRequest],
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async getProducts(@Res() res: Response): Promise<ProductDtoRequest[]> {
+    async getProducts(
+        @Res() res: Response,
+        @Query() options?: ProductGetDtoRequest,
+    ): Promise<ProductDtoRequest[]> {
         return handleControllerError(res, async () => 
-            res.status(HttpStatus.OK).json(await this.budgetService.getProducts())
+            res.status(HttpStatus.OK).json(await this.budgetService.getProductsByOptions(options))
         );
     }
 
@@ -188,7 +195,7 @@ export class BudgetController {
     @ApiBody({ type: ProductDtoRequest })
     @ApiOkResponse({
         description: 'The created product',
-        type: ProductDtoRequest,
+        type: ProductDtoResponse,
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)

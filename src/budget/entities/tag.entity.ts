@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique, ManyToMany, JoinTable } from 'typeorm';
-import { CategoryEntity } from '@/budget/entities';
+import { CategoryEntity, ProductEntity } from '@/budget/entities';
 
 @Entity()
 @Unique(['name'])
@@ -13,8 +13,9 @@ export class TagEntity {
     @Column({ type: 'text', nullable: true })
     color: string;
 
-    @Column('int', { array: true, nullable: true })
-    products: number[];
+    @ManyToMany(() => ProductEntity, (product) => product.tags)
+    @JoinTable()
+    products: ProductEntity[];
 
     @ManyToOne(() => CategoryEntity, (catrgory) => catrgory.tags)
     category: CategoryEntity;

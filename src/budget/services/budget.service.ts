@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryService, ProductService, TagService } from '@/budget/services';
-import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
+import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductGetDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
 import { TagDtoRequest, TagDtoResponse } from '@/budget/dto';
 
 @Injectable()
@@ -29,6 +29,16 @@ export class BudgetService {
     public deleteTag = async (id: number) => await this.tagService.deleteTag(id);
 
     public getProducts = async () => await this.productService.getAllProducts();
+
+    public getProductsByOptions = async (options: ProductGetDtoRequest) => {
+        if (options) {
+            const tags = Array.isArray(options.tags) ? options.tags : options.tags ? [options.tags] : [];
+            options.tags = tags;
+            return await this.productService.getProductsByOptions(options);
+        }
+        else return await this.productService.getAllProducts();
+    }
+
     public getProductById = async (id: number) => await this.productService.getProduct(id);
     public createProduct = async (userId: string, product: ProductDtoRequest) => {
         product.userId = userId;

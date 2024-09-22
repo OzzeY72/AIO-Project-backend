@@ -15,6 +15,10 @@ export class CategoryRepository {
         return await this.repository.find();
     }
 
+    async findById(id: number): Promise<CategoryEntity> {
+        return await this.repository.findOne({where: {id: id}});
+    }
+
     async updateCategory(id: number, updateData: CategoryDtoResponse) {
         await this.repository.update(id, updateData);
         return await this.repository.findOne({where: {id: id}});

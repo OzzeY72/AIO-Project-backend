@@ -18,9 +18,6 @@ export class ProductEntity {
     @ManyToMany(() => TagEntity, (tag) => tag.products)
     tags: TagEntity[];
 
-    @ManyToOne(() => CategoryEntity, (catrgory) => catrgory.products)
-    category: CategoryEntity;
-
     @Column({ name: "userId", nullable: false })
     userId: string;
 }

@@ -10,26 +10,26 @@ export class TagService {
     ) {}
 
     async getAllTags () {
-        const records = await this.tagRepository.findTags();
+        const records = await this.tagRepository.find();
         return records.map(toTagDtoResponse);
     }
 
     async getTag (conditions: Partial<TagEntity>): Promise<TagDtoResponse> {
-        const record = await this.tagRepository.findTag(conditions);
+        const record = await this.tagRepository.findById(conditions?.id);
         return toTagDtoResponse(record);
     }
 
     async addTag (tag: TagDtoRequest) {
-        const record = await this.tagRepository.createTag(tag);
+        const record = await this.tagRepository.create(tag);
         return toTagDtoResponse(record);
     }
 
     async updateTag (tag: TagDtoResponse) {
-        const record = await this.tagRepository.updateTag(tag.id, tag);
+        const record = await this.tagRepository.update(tag.id, tag);
         return toTagDtoResponse(record);
     }
 
     async deleteTag (id: number) {
-        return await this.tagRepository.deleteTag(id);
+        return await this.tagRepository.delete(id);
     }
 }
