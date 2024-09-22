@@ -10,6 +10,9 @@ export class TagDtoResponse {
 
     @ApiProperty({ description: 'Color of tag' })
     color: string | null;
+
+    @ApiProperty({ description: 'UserId can be null' })
+    userId?: string;
 }
 
 export class TagDtoRequest {
@@ -18,6 +21,9 @@ export class TagDtoRequest {
 
     @ApiProperty({ description: 'Color of tag' })
     color?: string;
+
+    @ApiProperty({ description: 'UserId can be null' })
+    userId?: string;
 }
 
 export const toTagDtoResponse = (tag: TagEntity) => ({

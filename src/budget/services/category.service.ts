@@ -14,11 +14,13 @@ export class CategoryService {
     }
 
     async addCategory (category: CategoryDtoRequest) {
-        return await this.categoryRepository.createCategory(category);
+        const result = await this.categoryRepository.createCategory(category);
+        return toCategoryDtoResponse(result);
     }
 
     async updateCategory (category: CategoryDtoResponse) {
-        return await this.categoryRepository.updateCategory(category.id, category);
+        const result = await this.categoryRepository.updateCategory(category.id, category);
+        return toCategoryDtoResponse(result);
     }
 
     async deleteCategory (id: number) {

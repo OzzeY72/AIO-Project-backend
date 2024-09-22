@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany } from 'typeorm';
-import { User } from '@/user/entities';
 import { CategoryEntity, TagEntity } from '@/budget/entities';
 
 @Entity()
@@ -7,7 +6,7 @@ export class ProductEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'string', nullable: false })
+    @Column({ type: 'text', nullable: false })
     name: string;
 
     @Column('decimal', { precision: 6, scale: 2 , nullable: false})
@@ -22,7 +21,6 @@ export class ProductEntity {
     @ManyToOne(() => CategoryEntity, (catrgory) => catrgory.products)
     category: CategoryEntity;
 
-    @ManyToOne(() => User, (user) => user.products)
-    @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
-    user: User;
+    @Column({ name: "userId", nullable: false })
+    userId: string;
 }

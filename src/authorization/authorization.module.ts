@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { AuthorizationService } from './services/authorization.service';
@@ -12,9 +12,9 @@ import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
-    UserModule,
-    JwtAuthModule,
-    TypeOrmModule.forFeature([User]),
+    forwardRef(() => UserModule),
+    forwardRef(() => JwtAuthModule),
+    forwardRef(() => TypeOrmModule.forFeature([User])),
   ],
   providers: [AuthorizationService, OAuthFactory, GoogleAuthService, AppleAuthService, JwtAuthGuard],
   controllers: [AuthorizationController],

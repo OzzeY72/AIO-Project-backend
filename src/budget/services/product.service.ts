@@ -14,17 +14,19 @@ export class ProductService {
         return records.map(toProductDtoResponse);
     }
 
-    async getProduct (conditions: Partial<ProductEntity>): Promise<ProductDtoResponse> {
-        const record = await this.productRepository.findProduct(conditions);
+    async getProduct (id: number): Promise<ProductDtoResponse> {
+        const record = await this.productRepository.findProductById(id);
         return toProductDtoResponse(record);
     }
 
     async addProduct (product: ProductDtoRequest) {
-        return await this.productRepository.createProduct(product);
+        const record = await this.productRepository.createProduct(product);
+        return toProductDtoResponse(record);
     }
 
     async updateProduct (product: ProductUpdateDtoRequest) {
-        return await this.productRepository.updateProduct(product);
+        const record = await this.productRepository.updateProduct(product);
+        return toProductDtoResponse(record);
     }
 
     async deleteProduct (id: number) {

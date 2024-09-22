@@ -1,21 +1,21 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from '@/app.controller';
 import { AppService } from '@/app.service';
 import { AuthorizationController, AuthorizationModule } from '@/authorization';
 import { UserModule } from '@/user';
 import { User } from '@/user/entities';
-import { HealthController, HealthModule } from '@/health';
+import { HealthModule } from '@/health/health.module';
 import { Health, HealthRecord, HealthStat, HealthRegister} from '@/health/entities';
-import { BudgetModule, BudgetController } from '@/budget';
+import { BudgetModule } from '@/budget/budget.module';
 import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
 import { JwtAuthModule } from './jwtauth.module';
 
 @Module({
   imports: [
-    JwtAuthModule,
-    AuthorizationModule,
+    forwardRef(() => JwtAuthModule),
+    forwardRef(() => AuthorizationModule),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -37,7 +37,9 @@ import { JwtAuthModule } from './jwtauth.module';
       }),
       inject: [ConfigService],
     }),
-    UserModule,
+    forwardRef(() => UserModule),
+    forwardRef(() => BudgetModule),
+    forwardRef(() => HealthModule),
   ],
   controllers: [AppController, AuthorizationController],
   providers: [AppService],

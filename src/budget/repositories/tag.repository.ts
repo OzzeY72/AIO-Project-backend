@@ -16,7 +16,11 @@ export class TagRepository {
     }
 
     async findTag(conditions: Partial<TagEntity>): Promise<TagEntity> {
-        return this.repository.findOne({ where: conditions });
+        const query = this.repository.createQueryBuilder('tag')
+            .where('tag.id = :id', { id: conditions?.id })
+
+        const result = await query.getOne();
+        return result;
     }
 
     async updateTag(id: number, updateData: Partial<TagEntity>) {

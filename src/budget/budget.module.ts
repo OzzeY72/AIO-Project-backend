@@ -2,25 +2,26 @@ import { Module, forwardRef } from '@nestjs/common';
 import { JwtAuthModule } from '@/jwtauth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
-import { CategoryService, ProductService, TagService } from '@/budget/services';
-import { BudgetService, BudgetController } from '@/budget';
+import { CategoryService, ProductService, TagService, BudgetService } from '@/budget/services';
+import { BudgetController } from './budget.controller';
 import { AuthorizationModule } from '@/authorization';
-import { CategoryRepository, ProductRepository, TagRepository } from './repositories';
+import { CategoryRepository, ProductRepository, TagRepository } from '@/budget/repositories';
 
 @Module({
     imports: [
-        forwardRef(() => AuthorizationModule),
-        forwardRef(()=>TypeOrmModule.forFeature([ProductEntity, TagEntity, CategoryEntity])),
+        AuthorizationModule,
+        JwtAuthModule,
+        forwardRef(() => TypeOrmModule.forFeature([ProductEntity, TagEntity, CategoryEntity])),
     ],
+    controllers: [BudgetController],
     providers: [
-        BudgetService,
-        CategoryService,
-        TagService, 
-        ProductService, 
         CategoryRepository,
         TagRepository,
         ProductRepository,
+        CategoryService,
+        TagService, 
+        ProductService, 
+        BudgetService,
     ],
-    controllers: [BudgetController]
 })
 export class BudgetModule {}

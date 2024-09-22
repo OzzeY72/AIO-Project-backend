@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from '@/budget/entities';
-import { ProductDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
+import { ProductDtoRequest, ProductUpdateDtoRequest, ProductGetDtoRequest } from '@/budget/dto';
 
 @Injectable()
 export class ProductRepository {
@@ -12,11 +12,56 @@ export class ProductRepository {
     ) {}
 
     async findProducts (): Promise<ProductEntity[]> {
-      return this.repository.find();
+        const query = this.repository.createQueryBuilder('product')
+            .leftJoinAndSelect('product.tags', 'tag')
+            .leftJoinAndSelect('product.category', 'category')
+        const result = query.getMany();
+        console.log(result);
+        return result;
     }
 
-    async findProduct (conditions: Partial<ProductEntity>): Promise<ProductEntity> {
-        return this.repository.findOne({ where: conditions });
+    async findProductsWithOptions (product: ProductGetDtoRequest): Promise<ProductEntity[]> {
+        const cd = new Date() //current Date
+        const first = product?.month ? new Date(product?.year ? product.year : cd.getFullYear(), 1) : 
+            product?.year ? new Date(product.year, cd.getMonth()-1, 1) : null;
+
+        const second = product?.month ? new Date(product?.year ? product.year : cd.getFullYear(), -1) : 
+            product?.year ? new Date(product.year, cd.getMonth()-1, -1) : null;
+            
+        const query = this.repository.createQueryBuilder('product')
+            .leftJoinAndSelect('product.tags', 'tag')
+            .leftJoinAndSelect('product.category', 'category')
+            .where('product.id > 0')
+
+        if (!!first && !!second) {
+            query.andWhere('product.date > :first and product.date < :second', {
+                first: first.getTime(),
+                second: second.getTime(),
+            });
+        } 
+
+        if (product?.tags && product.tags.length > 0) {
+            query.andWhere('tag.id IN (:...tag)', { tag: product.tags });
+        }
+
+        if (product?.category) {
+            query.andWhere('category.id = :category', { category: product.category });
+        }
+
+        const result = await query.getMany();
+        console.log(result);
+        return result;
+    }
+
+    async findProductById (id: number): Promise<ProductEntity> {
+        const query = this.repository.createQueryBuilder('product')
+            .leftJoinAndSelect('product.tags', 'tag')
+            .leftJoinAndSelect('product.category', 'category')
+            .where('product.id = :id', { id: id });
+
+        const result = await query.getOne();
+        console.log(result);
+        return result;
     }
 
     async updateProduct (product: ProductUpdateDtoRequest) {

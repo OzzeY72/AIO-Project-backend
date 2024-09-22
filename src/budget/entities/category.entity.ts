@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from 'typeorm';
-import { ProductEntity, TagEntity } from '@/budget/entities';
+import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
 @Unique(['name'])
@@ -7,12 +6,12 @@ export class CategoryEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'string', nullable: false })
+    @Column({ type: 'text', nullable: false })
     name: string;
 
-    @OneToMany(() => ProductEntity, (product) => product.category)
-    products: ProductEntity[];
+    @Column('int', { array: true, nullable: true })
+    products: number[];
 
-    @OneToMany(() => ProductEntity, (product) => product.category)
-    tags: TagEntity[];
+    @Column('int', { array: true, nullable: true })
+    tags: number[];
 }

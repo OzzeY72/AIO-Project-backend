@@ -18,13 +18,25 @@ export class BudgetService {
 
     public getTags = async () => await this.tagService.getAllTags();
     public getTagById = async (id: number) => await this.tagService.getTag({id: id});
-    public createTag = async (tag: TagDtoRequest) => await this.tagService.addTag(tag); 
-    public updateTag = async (tag: TagDtoResponse) => await this.tagService.updateTag(tag);
+    public createTag = async (userId: string, tag: TagDtoRequest) => {
+        tag.userId = userId;
+        return await this.tagService.addTag(tag);
+    }
+    public updateTag = async (userId: string, tag: TagDtoResponse) => {
+        tag.userId = userId;
+        return await this.tagService.updateTag(tag);
+    }
     public deleteTag = async (id: number) => await this.tagService.deleteTag(id);
 
     public getProducts = async () => await this.productService.getAllProducts();
-    public getProductById = async (id: number) => await this.productService.getProduct({id: id});
-    public createProduct = async (product: ProductDtoRequest) => await this.productService.addProduct(product); 
-    public updateProduct = async (id: number, product: ProductUpdateDtoRequest) => await this.productService.updateProduct(product);
+    public getProductById = async (id: number) => await this.productService.getProduct(id);
+    public createProduct = async (userId: string, product: ProductDtoRequest) => {
+        product.userId = userId;
+        return await this.productService.addProduct(product);
+    }
+    public updateProduct = async (userId: string, product: ProductUpdateDtoRequest) => { 
+        product.userId = userId;
+        return await this.productService.updateProduct(product);
+    }
     public deleteProduct = async (id: number) => await this.productService.deleteProduct(id);
 }

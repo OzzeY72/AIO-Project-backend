@@ -26,6 +26,7 @@ export class CategoryRepository {
 
     async createCategory(category: CategoryDtoRequest): Promise<CategoryEntity> {
         const categoryRecord = this.repository.create(category);
-        return await this.repository.save(categoryRecord);
+        const result = await this.repository.save(categoryRecord);
+        return result;
     }
 }

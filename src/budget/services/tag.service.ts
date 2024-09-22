@@ -20,11 +20,13 @@ export class TagService {
     }
 
     async addTag (tag: TagDtoRequest) {
-        return await this.tagRepository.createTag(tag);
+        const record = await this.tagRepository.createTag(tag);
+        return toTagDtoResponse(record);
     }
 
     async updateTag (tag: TagDtoResponse) {
-        return await this.tagRepository.updateTag(tag.id, tag);
+        const record = await this.tagRepository.updateTag(tag.id, tag);
+        return toTagDtoResponse(record);
     }
 
     async deleteTag (id: number) {

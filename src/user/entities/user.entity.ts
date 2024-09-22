@@ -43,6 +43,6 @@ export class User {
     @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.user)
     healthRecords: HealthRecord[];
 
-    @OneToMany(() => ProductEntity, (product) => product.user)
+    @OneToMany(() => ProductEntity, (product) => product.userId, { nullable: true })
     products: ProductEntity[];
 }

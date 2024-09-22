@@ -37,6 +37,9 @@ export class ProductDtoRequest {
 
     @ApiProperty({ description: 'Category of product' })
     category: number;
+
+    @ApiProperty({ description: 'UserId can be null' })
+    userId?: string;
 }
 
 export class ProductUpdateDtoRequest {
@@ -57,7 +60,25 @@ export class ProductUpdateDtoRequest {
 
     @ApiProperty({ description: 'Category of product' })
     category: number;
+    
+    @ApiProperty({ description: 'UserId can be null' })
+    userId?: string;
 }
+
+export class ProductGetDtoRequest {
+    @ApiProperty({ description: 'For wich month list products' })
+    month?: number;
+
+    @ApiProperty({ description: 'For wich year list products' })
+    year?: number;
+
+    @ApiProperty({ description: 'List of tags that the product must have in array of tags id' })
+    tags?: number[];
+
+    @ApiProperty({ description: 'Category of product' })
+    category?: number;
+}
+
 
 export const toProductDtoResponse = (product: ProductEntity) => ({
     id: product.id,

@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique, ManyToMany, JoinTable } from 'typeorm';
-import { User } from '@/user/entities';
-import { ProductEntity, CategoryEntity } from '@/budget/entities';
+import { CategoryEntity } from '@/budget/entities';
 
 @Entity()
 @Unique(['name'])
@@ -8,20 +7,18 @@ export class TagEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'string', nullable: false })
+    @Column({ type: 'text', nullable: false })
     name: string;
 
-    @Column({ type: 'string', nullable: true })
+    @Column({ type: 'text', nullable: true })
     color: string;
 
-    @ManyToMany(() => ProductEntity, (product) => product.tags)
-    @JoinTable()
-    products: ProductEntity[];
+    @Column('int', { array: true, nullable: true })
+    products: number[];
 
     @ManyToOne(() => CategoryEntity, (catrgory) => catrgory.tags)
     category: CategoryEntity;
 
-    @ManyToOne(() => User, (user) => user.healthRecords)
-    @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
-    user: User;
+    @Column({ name: "userId", nullable: false })
+    userId: string;
 }

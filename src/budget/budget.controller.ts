@@ -1,18 +1,18 @@
-import { Controller, Get, Put, Body, Post, Res, UseGuards, Delete, Param} from '@nestjs/common';
+import { Controller, Get, Put, Body, Post, Res, UseGuards, Delete, Param, HttpStatus, Req} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/authorization';
 import { handleControllerError } from '@/common/utils';
-import { BudgetService } from '@/budget';
 import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
 import { TagDtoRequest, TagDtoResponse } from '@/budget/dto';
 import { Response } from 'express';
+import { BudgetService } from '@/budget/services';
 
 @ApiTags('budget')
 @Controller('budget')
 export class BudgetController {
     constructor (
         private budgetService: BudgetService,
-    ) {}
+    ) {} 
 
     // Categories
     @Get('category')
@@ -23,8 +23,10 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async getCategories(@Res() res:Response): Promise<CategoryDtoResponse[]> {
-        return handleControllerError(res, async () => await this.budgetService.getCategories());
+    async getCategories(@Res() res: Response): Promise<CategoryDtoResponse[]> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.getCategories())
+        );
     }
 
     @Post('category')
@@ -36,8 +38,10 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async createCategory(@Body() category: CategoryDtoRequest, @Res() res:Response): Promise<CategoryDtoResponse> {
-        return handleControllerError(res, async () => await this.budgetService.createCategory(category));
+    async createCategory(@Body() category: CategoryDtoRequest, @Res() res: Response): Promise<CategoryDtoResponse> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.createCategory(category))
+        );
     }
 
     @Put('category')
@@ -49,8 +53,10 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async updateCategory(@Body() category: CategoryDtoResponse, @Res() res:Response): Promise<CategoryDtoResponse> {
-        return handleControllerError(res, async () => await this.budgetService.updateCategory(category));
+    async updateCategory(@Body() category: CategoryDtoResponse, @Res() res: Response): Promise<CategoryDtoResponse> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.updateCategory(category))
+        );
     }
 
     @Delete('category/:id')
@@ -59,9 +65,12 @@ export class BudgetController {
     @ApiOkResponse({ description: 'Category deleted' })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async deleteCategory(@Param('id') id: number, @Res() res:Response): Promise<void> {
-        return handleControllerError(res, async () => await this.budgetService.deleteCategory(id));
+    async deleteCategory(@Param('id') id: number, @Res() res: Response): Promise<void> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.deleteCategory(id))
+        );
     }
+
     // Tags
     @Get('tag')
     @ApiOperation({ summary: 'Get all tags' })
@@ -71,8 +80,10 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async getTags(@Res() res:Response): Promise<TagDtoResponse[]> {
-        return handleControllerError(res, async () => await this.budgetService.getTags());
+    async getTags(@Res() res: Response): Promise<TagDtoResponse[]> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.getTags())
+        );
     }
 
     @Get('tag/:id')
@@ -84,8 +95,10 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async getTagById(@Param('id') id: number, @Res() res:Response): Promise<TagDtoResponse> {
-        return handleControllerError(res, async () => await this.budgetService.getTagById(id));
+    async getTagById(@Param('id') id: number, @Res() res: Response): Promise<TagDtoResponse> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.getTagById(id))
+        );
     }
 
     @Post('tag')
@@ -97,8 +110,15 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async createTag(@Body() tag: TagDtoRequest, @Res() res:Response): Promise<TagDtoResponse> {
-        return handleControllerError(res, async () => await this.budgetService.createTag(tag));
+    async createTag(
+        @Req() request: any,
+        @Body() tag: TagDtoRequest, 
+        @Res() res: Response
+    ): Promise<TagDtoResponse> {
+        const userId = request.user.sub; 
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.createTag(userId, tag))
+        );
     }
 
     @Put('tag')
@@ -110,8 +130,15 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async updateTag(@Body() tag: TagDtoResponse, @Res() res:Response): Promise<TagDtoResponse> {
-        return handleControllerError(res, async () => await this.budgetService.updateTag(tag));
+    async updateTag(
+        @Req() request: any,
+        @Body() tag: TagDtoResponse, 
+        @Res() res: Response
+    ): Promise<TagDtoResponse> {
+        const userId = request.user.sub; 
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.updateTag(userId, tag))
+        );
     }
 
     @Delete('tag/:id')
@@ -120,8 +147,10 @@ export class BudgetController {
     @ApiOkResponse({ description: 'Tag deleted' })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async deleteTag(@Param('id') id: number, @Res() res:Response): Promise<void> {
-        return handleControllerError(res, async () => await this.budgetService.deleteTag(id));
+    async deleteTag(@Param('id') id: number, @Res() res: Response): Promise<void> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.deleteTag(id))
+        );
     }
 
     // Products
@@ -133,8 +162,10 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async getProducts(@Res() res:Response): Promise<ProductDtoRequest[]> {
-        return handleControllerError(res, async () => await this.budgetService.getProducts());
+    async getProducts(@Res() res: Response): Promise<ProductDtoRequest[]> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.getProducts())
+        );
     }
 
     @Get('product/:id')
@@ -146,8 +177,10 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async getProductById(@Param('id') id: number, @Res() res:Response): Promise<ProductDtoRequest> {
-        return handleControllerError(res, async () => await this.budgetService.getProductById(id));
+    async getProductById(@Param('id') id: number, @Res() res: Response): Promise<ProductDtoRequest> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.getProductById(id))
+        );
     }
 
     @Post('product')
@@ -159,11 +192,18 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async createProduct(@Body() product: ProductDtoRequest, @Res() res:Response): Promise<ProductDtoRequest> {
-        return handleControllerError(res, async () => await this.budgetService.createProduct(product));
+    async createProduct(
+        @Req() request: any,
+        @Body() product: ProductDtoRequest, 
+        @Res() res: Response
+    ): Promise<ProductDtoRequest> {
+        const userId = request.user.sub; 
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.createProduct(userId, product))
+        );
     }
 
-    @Put('product/:id')
+    @Put('product')
     @ApiOperation({ summary: 'Update an existing product' })
     @ApiParam({ name: 'id', type: 'number' })
     @ApiBody({ type: ProductUpdateDtoRequest })
@@ -173,8 +213,15 @@ export class BudgetController {
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async updateProduct(@Param('id') id: number, @Body() product: ProductUpdateDtoRequest, @Res() res:Response): Promise<ProductUpdateDtoRequest> {
-        return handleControllerError(res, async () => await this.budgetService.updateProduct(id, product));
+    async updateProduct(
+        @Req() request: any,
+        @Body() product: ProductUpdateDtoRequest, 
+        @Res() res: Response
+    ): Promise<ProductUpdateDtoRequest> {
+        const userId = request.user.sub; 
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.updateProduct(userId, product))
+        );
     }
 
     @Delete('product/:id')
@@ -183,7 +230,9 @@ export class BudgetController {
     @ApiOkResponse({ description: 'Product deleted' })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async deleteProduct(@Param('id') id: number, @Res() res:Response): Promise<void> {
-        return handleControllerError(res, async () => await this.budgetService.deleteProduct(id));
-    }
+    async deleteProduct(@Param('id') id: number, @Res() res: Response): Promise<void> {
+        return handleControllerError(res, async () => 
+            res.status(HttpStatus.OK).json(await this.budgetService.deleteProduct(id))
+        );
+    }  
 }
