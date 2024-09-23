@@ -49,7 +49,10 @@ export class HealthService implements OnApplicationBootstrap {
         userId: string, 
         healthId: number
     ) {
-        return await this.healthRegisterService.registerUser(countPerDay, pricePerThing, userId, healthId);
+        const result = await this.healthRegisterService.registerUser(countPerDay, pricePerThing, userId, healthId);
+        //POSSIBLY resource intensive
+        this.healthStatsService.updateUserStats();
+        return result;
     }
     //Code for beginHealthStreak
     async toggleHealthStreak(

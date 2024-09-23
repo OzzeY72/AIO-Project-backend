@@ -22,16 +22,16 @@ export class HealthStatsService {
   async getCompleteUserStat(userId: string, healthId: number): Promise<CompleteStatDto> {
     const stat = await this.getUserStat(userId, healthId);
     const lastStreak = await this.healthRecordService.findLast(userId, healthId);
-    const { countPerDay } = await this.healthRegisterService.getUserRegisterData(userId, healthId);
+    const { countPerDay, pricePerThing } = await this.healthRegisterService.getUserRegisterData(userId, healthId);
     const badThingCount = countPerDay * stat.totalDays;
-
+    console.log(pricePerThing);
     const completeStatistic = {
       totalDays: stat.totalDays,
       longestStreak: stat.longestStreak,
       lastBadDay: lastStreak.streakBegin,
       lastStreakDays: calculateDaysBetween(lastStreak.streakBegin, lastStreak.streakEnd),
       badThingCount: badThingCount,
-      moneySaved: badThingCount * 0.25,
+      moneySaved: Math.floor((badThingCount / 20) * pricePerThing ),
     }
     return completeStatistic;
   }
