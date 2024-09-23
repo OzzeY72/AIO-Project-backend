@@ -31,7 +31,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
 # 11. Открываем порт для работы приложения
-EXPOSE 3000
+EXPOSE 3001
 
 # 12. Определяем команду для запуска приложения
 CMD ["node", "dist/main"]
