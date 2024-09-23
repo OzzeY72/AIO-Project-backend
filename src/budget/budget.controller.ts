@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiOkResponse, ApiParam,
 import { JwtAuthGuard } from '@/authorization';
 import { handleControllerError } from '@/common/utils';
 import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductDtoResponse, ProductGetDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
-import { TagDtoRequest, TagDtoResponse } from '@/budget/dto';
+import { TagDtoRequest, TagDtoResponse, TagDtoUpdateRequest } from '@/budget/dto';
 import { Response } from 'express';
 import { BudgetService } from '@/budget/services';
 
@@ -123,7 +123,7 @@ export class BudgetController {
 
     @Put('tag')
     @ApiOperation({ summary: 'Update an existing tag' })
-    @ApiBody({ type: TagDtoResponse })
+    @ApiBody({ type: TagDtoUpdateRequest })
     @ApiOkResponse({
         description: 'The updated tag',
         type: TagDtoResponse,
@@ -132,7 +132,7 @@ export class BudgetController {
     @UseGuards(JwtAuthGuard)
     async updateTag(
         @Req() request: any,
-        @Body() tag: TagDtoResponse, 
+        @Body() tag: TagDtoUpdateRequest, 
         @Res() res: Response
     ): Promise<TagDtoResponse> {
         const userId = request.user.sub; 

@@ -34,7 +34,15 @@ export class TagRepository {
     }
 
     async update(id: number, updateData: TagDtoUpdateRequest) {
-        await this.repository.update(id, updateData);
+        const category = await this.categoryRepository.findById(updateData.category);
+
+        await this.repository.update(id, {
+            id,
+            name: updateData.name,
+            color: updateData.color,
+            userId: updateData.userId,
+            category: category,
+        });
         return await this.repository.findOne({where: {id: id}});
     }
 

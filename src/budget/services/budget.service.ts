@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryService, ProductService, TagService } from '@/budget/services';
 import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductGetDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
-import { TagDtoRequest, TagDtoResponse } from '@/budget/dto';
+import { TagDtoRequest, TagDtoUpdateRequest } from '@/budget/dto';
 
 @Injectable()
 export class BudgetService {
@@ -22,7 +22,7 @@ export class BudgetService {
         tag.userId = userId;
         return await this.tagService.addTag(tag);
     }
-    public updateTag = async (userId: string, tag: TagDtoResponse) => {
+    public updateTag = async (userId: string, tag: TagDtoUpdateRequest) => {
         tag.userId = userId;
         return await this.tagService.updateTag(tag);
     }

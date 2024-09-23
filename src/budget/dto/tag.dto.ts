@@ -29,9 +29,22 @@ export class TagDtoRequest extends BaseDto{
     userId?: string;
 }
 
-export class TagDtoUpdateRequest extends BaseDto{
-    @ApiProperty({ description: 'Category' })
-    category: CategoryDtoResponse;
+
+export class TagDtoUpdateRequest {
+    @ApiProperty({ description: 'Id of tag' })
+    id: number;
+
+    @ApiProperty({ description: 'Name of tag' })
+    name?: string;
+
+    @ApiProperty({ description: 'Color of tag' })
+    color?: string | null;
+
+    @ApiProperty({ description: 'UserId can be null' })
+    userId?: string;
+
+    @ApiProperty({ description: 'Category Id of tag' })
+    category?: number;
 }
 
 export const toTagDtoResponse = (tag: TagEntity): TagDtoResponse => ({

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TagEntity } from '@/budget/entities';
 import { TagRepository } from '@/budget/repositories'; 
-import { toTagDtoResponse, TagDtoResponse, TagDtoRequest } from '@/budget/dto';
+import { toTagDtoResponse, TagDtoResponse, TagDtoRequest, TagDtoUpdateRequest } from '@/budget/dto';
 
 @Injectable()
 export class TagService {
@@ -24,7 +24,7 @@ export class TagService {
         return toTagDtoResponse(record);
     }
 
-    async updateTag (tag: TagDtoResponse) {
+    async updateTag (tag: TagDtoUpdateRequest) {
         const record = await this.tagRepository.update(tag.id, tag);
         return toTagDtoResponse(record);
     }
