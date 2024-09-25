@@ -14,7 +14,11 @@ export class TagRepository {
     ) {}
 
     async find(): Promise<TagEntity[]> {
-      return this.repository.find();
+        const query = this.repository.createQueryBuilder('tag')
+            .leftJoinAndSelect('tag.category', 'category')
+        const result = await query.getMany();
+        console.log(result);
+        return result;
     }
 
     async findById(id: number): Promise<TagEntity> {

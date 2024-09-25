@@ -18,7 +18,7 @@ export class ProductRepository {
         const query = this.repository.createQueryBuilder('product')
             .leftJoinAndSelect('product.tags', 'tag')
             .leftJoinAndSelect('tag.category', 'category')
-        const result = query.getMany();
+        const result = await query.getMany();
         console.log(result);
         return result;
     }

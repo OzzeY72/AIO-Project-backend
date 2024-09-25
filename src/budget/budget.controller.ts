@@ -162,7 +162,7 @@ export class BudgetController {
     @ApiQuery({ name: 'category', required: false, description: 'Filter by category' })
     @ApiOkResponse({
         description: 'List of products',
-        type: [ProductDtoRequest],
+        type: [ProductDtoResponse],
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
@@ -180,7 +180,7 @@ export class BudgetController {
     @ApiParam({ name: 'id', type: 'number' })
     @ApiOkResponse({
         description: 'Product details',
-        type: ProductDtoRequest,
+        type: ProductDtoResponse,
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
@@ -216,7 +216,7 @@ export class BudgetController {
     @ApiBody({ type: ProductUpdateDtoRequest })
     @ApiOkResponse({
         description: 'The updated product',
-        type: ProductUpdateDtoRequest,
+        type: ProductDtoResponse,
     })
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
