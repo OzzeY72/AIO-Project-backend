@@ -59,6 +59,11 @@ export class ProductGetDtoRequest {
     year?: number;
 
     @IsOptional()
+    @IsString()
+    @ApiProperty({ description: 'Partial or full name of product' })
+    name?: number;
+
+    @IsOptional()
     @ApiProperty({ description: 'List of tags that the product must have in array of tags id', type: [Number] })
     tags?: number[];
 

@@ -41,6 +41,10 @@ export class ProductRepository {
             .leftJoinAndSelect('tag.category', 'category')
             .where('product.id > 0')
 
+        if (options?.name) {
+            query.andWhere('product.name LIKE :name', {name: `%${options.name}%`});
+        }
+        
         if (!!first && !!second) {
             query.andWhere('product.date > :first and product.date < :second', {
                 first: first.toISOString(),

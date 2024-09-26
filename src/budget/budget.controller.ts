@@ -156,10 +156,7 @@ export class BudgetController {
     // Products
     @Get('product')
     @ApiOperation({ summary: 'Get all products with filter' })
-    @ApiQuery({ name: 'month', required: false, description: 'Filter by month' })
-    @ApiQuery({ name: 'year', required: false, description: 'Filter by year' })
-    @ApiQuery({ name: 'tags', required: false, description: 'Filter by tag' })
-    @ApiQuery({ name: 'category', required: false, description: 'Filter by category' })
+    @ApiQuery({ description: 'Get products with filters', type: ProductGetDtoRequest })
     @ApiOkResponse({
         description: 'List of products',
         type: [ProductDtoResponse],
