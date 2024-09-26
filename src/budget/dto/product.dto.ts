@@ -50,26 +50,26 @@ export class ProductDtoResponse extends BaseDto {
 export class ProductGetDtoRequest {
     @IsOptional()
     @IsNumber()
-    @ApiProperty({ description: 'For wich month list products' })
+    @ApiProperty({ description: 'For wich month list products', required: false})
     month?: number;
 
     @IsOptional()
     @IsNumber()
-    @ApiProperty({ description: 'For wich year list products' })
+    @ApiProperty({ description: 'For wich year list products', required: false })
     year?: number;
 
     @IsOptional()
     @IsString()
-    @ApiProperty({ description: 'Partial or full name of product' })
+    @ApiProperty({ description: 'Partial or full name of product', required: false })
     name?: number;
 
     @IsOptional()
-    @ApiProperty({ description: 'List of tags that the product must have in array of tags id', type: [Number] })
+    @ApiProperty({ description: 'List of tags that the product must have in array of tags id', type: [Number], required: false })
     tags?: number[];
 
     @IsOptional()
     @IsNumber()
-    @ApiProperty({ description: 'Category of product' })
+    @ApiProperty({ description: 'Category of product', required: false })
     category?: number;
 }
 

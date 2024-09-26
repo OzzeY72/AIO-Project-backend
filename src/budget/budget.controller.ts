@@ -156,7 +156,6 @@ export class BudgetController {
     // Products
     @Get('product')
     @ApiOperation({ summary: 'Get all products with filter' })
-    @ApiQuery({ description: 'Get products with filters', type: ProductGetDtoRequest })
     @ApiOkResponse({
         description: 'List of products',
         type: [ProductDtoResponse],
