@@ -61,7 +61,7 @@ export class ProductGetDtoRequest {
     @IsOptional()
     @IsString()
     @ApiProperty({ description: 'Partial or full name of product', required: false })
-    name?: number;
+    name?: string;
 
     @IsOptional()
     @ApiProperty({ description: 'List of tags that the product must have in array of tags id', type: [Number], required: false })

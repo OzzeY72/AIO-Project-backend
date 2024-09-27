@@ -21,6 +21,7 @@ export class UserService {
             name: openId.name,
             provider: provider,
             providerId: openId.providerId,
+            userLogo: openId.userLogo,
             userId: uuidv4(),
         });
         return this.userRepository.save(user_db);
