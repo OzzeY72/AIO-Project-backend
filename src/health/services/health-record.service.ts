@@ -58,6 +58,8 @@ export class HealthRecordService {
         if (!streakStart) streakStart = new Date();
         streakStart = toClearDate(streakStart);
         const lastStreak = await this.findLast(userId, healthId, true);
+        //UNITE close by date records
+        //CHECK ability to create new record
         if (
             !lastStreak ||
             (
@@ -87,6 +89,7 @@ export class HealthRecordService {
         
         records.forEach(record => {
             const streakDays = calculateDaysBetween(record.streakBegin, record.streakEnd);
+            console.log(calculateDaysBetween(record.streakBegin, record.streakEnd), record);
             totalDays += streakDays;
             currentStreak = Math.max(currentStreak, streakDays);
         });

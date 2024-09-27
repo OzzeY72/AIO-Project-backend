@@ -28,8 +28,8 @@ export class HealthStatsService {
     const completeStatistic = {
       totalDays: stat.totalDays,
       longestStreak: stat.longestStreak,
-      lastBadDay: lastStreak.streakBegin,
-      lastStreakDays: calculateDaysBetween(lastStreak.streakBegin, lastStreak.streakEnd),
+      lastBadDay: lastStreak.streakEnd ? null : lastStreak.streakBegin,
+      lastStreakDays: lastStreak.streakEnd ? null : calculateDaysBetween(lastStreak.streakBegin, lastStreak.streakEnd),
       badThingCount: badThingCount,
       moneySaved: Math.floor((badThingCount / 20) * pricePerThing ),
     }
