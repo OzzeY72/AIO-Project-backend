@@ -7,10 +7,12 @@ export class HealthRecord {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'timestamp', nullable: false })
+    //@Column({ type: 'timestamp', nullable: false })
+    @Column({ type: 'datetime', nullable: false })
     streakBegin: Date;
 
-    @Column({ type: 'timestamp', nullable: true })
+    //@Column({ type: 'timestamp', nullable: true })
+    @Column({ type: 'datetime', nullable: true })
     streakEnd: Date;
 
     @ManyToOne(() => Health, (health) => health.healthRecords)

@@ -6,8 +6,8 @@ import { AuthorizationController } from './authorization.controller'
 import { OAuthFactory } from './factories/oauth.factory';
 import { AppleAuthService, GoogleAuthService } from './services/providers.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard'
-import { JwtAuthModule } from 'src/jwtauth.module';
-import { UserModule } from 'src/user/user.module';
+import { JwtAuthModule } from '@/jwtauth.module';
+import { UserModule } from '@/user/user.module';
 
 
 @Module({

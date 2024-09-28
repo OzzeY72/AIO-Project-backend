@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
+import { ERROR_MESSAGES } from '@/common/error-messages';
 
 @Injectable()
 export class AuthorizationService {
@@ -17,7 +17,7 @@ export class AuthorizationService {
         );
 
         if (!client) {
-            throw new UnauthorizedException('Invalid client credentials');
+            throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CLIENT_CREDENTIALS);
         }
     }
     generateAccessToken(userId: string) {
@@ -29,7 +29,7 @@ export class AuthorizationService {
           const payload = this.jwtService.verify(token);
           return payload;
         } catch (error) {
-          throw new UnauthorizedException('Invalid token');
+          throw new UnauthorizedException(ERROR_MESSAGES.INVALID_TOKEN);
         }
     }
     generateIdToken(userId: string, name: string, email: string) {

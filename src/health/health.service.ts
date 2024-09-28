@@ -25,8 +25,8 @@ export class HealthService implements OnApplicationBootstrap {
     }
 
     async onApplicationBootstrap() {
-        await this.healthStatsService.updateUserStats();
-        console.log('Updated user stats');
+        //await this.healthStatsService.updateUserStats();
+        console.log('NOT Updated user stats');
     }
 
     async getAllByUserAndHealth(

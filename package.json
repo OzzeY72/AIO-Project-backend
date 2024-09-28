@@ -33,6 +33,7 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "schedule": "^0.5.0",
+    "sqlite3": "^5.1.7",
     "swagger-ui-express": "^5.0.1",
     "typeorm": "^0.3.20",
     "uuid": "^10.0.0"
@@ -75,6 +76,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1"
+    }
   }
 }

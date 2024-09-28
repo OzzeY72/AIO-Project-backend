@@ -13,9 +13,9 @@ export class UserService {
         private readonly userRepository: Repository<User>,
     ) {}
     async FindUser(props: NonNullable<any>): Promise<User | undefined> {
-        return this.userRepository.findOneBy({ ...props });
+        return await this.userRepository.findOneBy({ ...props });
     }
-    async CreateUser( openId: OpenID, provider: string) {
+    async CreateUser( openId: OpenID, provider: string): Promise<User> {
         const user_db = this.userRepository.create({
             email: openId.email,
             name: openId.name,
@@ -24,7 +24,7 @@ export class UserService {
             userLogo: openId.userLogo,
             userId: uuidv4(),
         });
-        return this.userRepository.save(user_db);
+        return await this.userRepository.save(user_db);
     }
     toUserDto(user: User): UserResponseDto {
         const userDto: UserResponseDto = {

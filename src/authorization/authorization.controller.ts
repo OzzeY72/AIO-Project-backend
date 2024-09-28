@@ -2,9 +2,9 @@ import { Controller, Get, Query, Res, Post, Body, HttpStatus } from '@nestjs/com
 import { Response } from 'express';
 import { AuthorizationService } from './services/authorization.service';
 import { OAuthFactory } from './factories/oauth.factory';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '@/user/user.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import { ERROR_MESSAGES } from '@/common/error-messages';
 
 @ApiTags('Authorization')
 @Controller('oauth')
@@ -46,7 +46,7 @@ export class AuthorizationController {
         @Res() res: Response
     ) {
         try {
-            if(grantType !== 'authorization_code') return res.status(HttpStatus.BAD_REQUEST).json({ error: "Unsupported grant_type" });
+            if(grantType !== 'authorization_code') return res.status(HttpStatus.BAD_REQUEST).json({ error: ERROR_MESSAGES.BAD_GRANT_TYPE });
             this.authorizationService.ClientCredentialsVerify(clientId, clientSecret);
 
             //Request OpenId from Provider

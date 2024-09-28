@@ -10,3 +10,12 @@ export class UserResponseDto {
     @ApiProperty({ example: 'https://e7.pngegg.com/pngimages/251/239/png-clipart-logo-design-rebranding-typography-letter-a-angle-text-thumbnail.png', description: 'Link to Image' })
     userLogo: string;
 }
+
+export class UserCreateDto {
+    email: string;
+    name: string;
+    provider: string;
+    providerId: string;
+    userLogo: string;
+    userId: string;
+}
