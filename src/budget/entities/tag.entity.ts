@@ -15,10 +15,10 @@ export class TagEntity {
 
     @ManyToMany(() => ProductEntity, (product) => product.tags)
     @JoinTable()
-    products: ProductEntity[];
+    products?: ProductEntity[];
 
     @ManyToOne(() => CategoryEntity, (catrgory) => catrgory.tags)
-    category: CategoryEntity;
+    category?: CategoryEntity;
 
     @Column({ name: "userId", nullable: false })
     userId: string;
