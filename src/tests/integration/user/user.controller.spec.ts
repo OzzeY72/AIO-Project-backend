@@ -5,6 +5,9 @@ import { UserService } from '../../../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { createTestUser } from '@/tests/factories/user.factory';
 import { createTestModule } from '@/tests/test.module';
+import { UserController } from '@/user';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '@/user/entities';
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -12,7 +15,11 @@ describe('UserController', () => {
   let accessToken: string;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await createTestModule();
+    const moduleFixture: TestingModule = await createTestModule({
+      controllers: [UserController],
+      providers: [UserService],
+      imports: [TypeOrmModule.forFeature([User])]}
+    ).compile();
     
     app = moduleFixture.createNestApplication();
     jwtService = app.get<JwtService>(JwtService);

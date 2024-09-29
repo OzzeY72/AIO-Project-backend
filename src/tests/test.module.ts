@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,9 +8,19 @@ import { UserService } from '@/user';
 import { JwtAuthModule } from '@/jwtauth.module';
 import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
 import { Health, HealthRecord, HealthStat, HealthRegister} from '@/health/entities';
+import { Controller, DynamicModule, Provider } from '@nestjs/common/interfaces';
+import { Type } from '@nestjs/common/interfaces';
 
-export const createTestModule = async (): Promise<TestingModule> => {
-  return await Test.createTestingModule({
+export const createTestModule = ({
+  controllers = [],
+  providers = [],
+  imports = [],
+}: {
+  controllers?: Type<any>[];
+  providers?: Provider[];
+  imports?: (Type<any> | DynamicModule) [];
+} = {}): TestingModuleBuilder => {
+  return Test.createTestingModule({
     imports: [
       TypeOrmModule.forRoot({
         type: 'sqlite',
@@ -22,10 +32,10 @@ export const createTestModule = async (): Promise<TestingModule> => {
         ],
         synchronize: true,
       }),
-      TypeOrmModule.forFeature([User]),
       JwtAuthModule,
+      ...imports
     ],
-    controllers: [UserController],
-    providers: [UserService],
-  }).compile();
+    controllers: controllers ?? [],
+    providers: providers ?? [],
+  })
 };
