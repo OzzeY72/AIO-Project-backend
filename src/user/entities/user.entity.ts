@@ -31,16 +31,16 @@ export class User {
     @Column({ nullable: true })
     refreshToken: string;
 
-    //@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    //@Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 
-    //@Column({ type: 'timestamp', nullable: true })
-    @Column({ type: 'datetime', nullable: true })
+    @Column({ type: 'timestamp', nullable: true })
+    //@Column({ type: 'date', nullable: true })
     updatedAt: Date;
 
-    //@Column({ type: 'timestamp', nullable: true })
-    @Column({ type: 'datetime', nullable: true })
+    @Column({ type: 'timestamp', nullable: true })
+    //@Column({ type: 'date', nullable: true })
     lastLogin: Date;
 
     @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.user)

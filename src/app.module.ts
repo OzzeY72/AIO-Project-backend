@@ -11,6 +11,8 @@ import { Health, HealthRecord, HealthStat, HealthRegister} from '@/health/entiti
 import { BudgetModule } from '@/budget/budget.module';
 import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
 import { JwtAuthModule } from './jwtauth.module';
+import { SportModule } from '@/sport/sport.module';
+import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay } from '@/sport/entities';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { JwtAuthModule } from './jwtauth.module';
           User, 
           Health, HealthRecord, HealthStat, HealthRegister,
           ProductEntity, TagEntity, CategoryEntity,
+          ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay,
         ],
         synchronize: true,
       }),
@@ -40,6 +43,7 @@ import { JwtAuthModule } from './jwtauth.module';
     forwardRef(() => UserModule),
     forwardRef(() => BudgetModule),
     forwardRef(() => HealthModule),
+    SportModule,
   ],
   controllers: [AppController, AuthorizationController],
   providers: [AppService],

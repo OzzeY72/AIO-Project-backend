@@ -12,8 +12,8 @@ export class ProductEntity {
     @Column('decimal', { precision: 6, scale: 2 , nullable: false})
     price: number;
 
-    //@Column('timestamp',{ nullable: false})
-    @Column('datetime',{ nullable: false})
+    @Column('timestamp',{ nullable: false})
+    //@Column('date',{ nullable: false})
     date: Date;
 
     @ManyToMany(() => TagEntity, (tag) => tag.products)
