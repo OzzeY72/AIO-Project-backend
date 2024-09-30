@@ -12,18 +12,32 @@ export class PlanExerciseService {
     private readonly planExerciseRepository: Repository<PlanExercise>,
   ) {}
 
-  async findAll(options?: Partial<PlanExercise> | null): Promise<PlanExercise[]> {
-    return options
-      ? await this.planExerciseRepository.find({ where: options })
-      : await this.planExerciseRepository.find();
+  async findAll(userId: string, options?: Partial<PlanExercise> | null): Promise<PlanExercise[]> {
+    const queryBuilder = this.planExerciseRepository.createQueryBuilder('planExercise')
+      .where('planExercise.userId = :userId', { userId });
+
+    if (options) {
+      Object.keys(options).forEach(key => {
+        queryBuilder.andWhere(`planExercise.${key} = :${key}`, { [key]: options[key] });
+      });
+    }
+
+    queryBuilder
+      .leftJoinAndSelect('planExercise.exercise', 'exercise');
+      
+    const result = await queryBuilder.getMany();
+    return result;
   }
 
   async findOne(id: number, userId: string): Promise<PlanExercise> {
     return await this.planExerciseRepository.findOne({ where: { id, userId } });
   }
 
-  async findByIds(ids: number[]): Promise<PlanExercise[]> {
-    return await this.planExerciseRepository.findBy({ id: In(ids) });
+  async findByIds(ids: number[], userId: string): Promise<PlanExercise[]> {
+    return await this.planExerciseRepository.findBy({ 
+      id: In(ids),
+      userId
+    });
   }
   
   async create(userId: string, createPlanExerciseDto: CreatePlanExerciseDto): Promise<PlanExercise> {
@@ -48,7 +62,7 @@ export class PlanExerciseService {
     return await this.findOne(id, userId);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.planExerciseRepository.delete(id);
+  async delete(id: number, userId: string): Promise<void> {
+    await this.planExerciseRepository.delete({id, userId});
   }
 }

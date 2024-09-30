@@ -1,9 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { ExerciseEntity } from './exercise.entity';
 import { PlanExerciseDay } from './plan-exercise-day.entity';
 
 @Entity('plan_exercise')
-@Unique(['id'])
 export class PlanExercise {
   @PrimaryGeneratedColumn()
   id: number;

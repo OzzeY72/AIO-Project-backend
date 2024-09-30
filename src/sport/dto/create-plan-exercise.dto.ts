@@ -13,4 +13,8 @@ export class CreatePlanExerciseDto {
   @ApiProperty({ description: 'Number of repetitions per set' })
   @IsNumber()
   reps: number;
+
+  @ApiProperty({ description: 'ID of the associated plan day' })
+  @IsNumber()
+  planExerciseDayId: number;
 }

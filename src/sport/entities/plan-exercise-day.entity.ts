@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique } from 'typeo
 import { PlanExercise } from './plan-exercise.entity';
 
 @Entity('plan_exercise_day')
-@Unique(['id', 'weekDay'])
+@Unique(['weekDay'])
 export class PlanExerciseDay {
   @PrimaryGeneratedColumn()
   id: number;

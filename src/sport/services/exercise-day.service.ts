@@ -11,16 +11,16 @@ export class ExerciseDayService {
     private readonly exerciseDayRepository: Repository<ExerciseDay>,
   ) {}
 
-  async findAll(options?: Partial<ExerciseDay> | null): Promise<ExerciseDay[]> {
+  async findAll(userId: string, options?: Partial<ExerciseDay> | null): Promise<ExerciseDay[]> {
     return options 
-      ? await this.exerciseDayRepository.find({ relations: ['planExercise'], where: options })
-      : await this.exerciseDayRepository.find({ relations: ['planExercise'] });
+      ? await this.exerciseDayRepository.find({ relations: ['exerciseRecords'], where: {...options, userId} })
+      : await this.exerciseDayRepository.find({ relations: ['exerciseRecords'], where: {userId} });
   }
 
-  async findOne(id: number): Promise<ExerciseDay> {
+  async findOne(id: number, userId: string): Promise<ExerciseDay> {
     return await this.exerciseDayRepository.findOne({
-      where: { id },
-      relations: ['planExercise'],
+      where: { id, userId },
+      relations: ['exerciseRecords'],
     });
   }
 
@@ -37,10 +37,13 @@ export class ExerciseDayService {
       ...updateExerciseDayDto,
       userId,
     });
-    return await this.findOne(id);
+    return await this.findOne(id, userId);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.exerciseDayRepository.delete(id);
+  async delete(id: number, userId: string): Promise<void> {
+    await this.exerciseDayRepository.delete({
+      id,
+      userId,
+    });
   }
 }

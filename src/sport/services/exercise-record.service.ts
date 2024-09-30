@@ -11,14 +11,14 @@ export class ExerciseRecordService {
     private readonly exerciseRecordRepository: Repository<ExerciseRecordEntity>,
   ) {}
 
-  async findAll(options?: Partial<ExerciseRecordEntity> | null): Promise<ExerciseRecordEntity[]> {
+  async findAll(userId: string, options?: Partial<ExerciseRecordEntity> | null): Promise<ExerciseRecordEntity[]> {
     return options
-      ? await this.exerciseRecordRepository.find({ where: options })
-      : await this.exerciseRecordRepository.find()
+      ? await this.exerciseRecordRepository.find({where: {...options, userId}})
+      : await this.exerciseRecordRepository.find({where: {userId}})
   }
 
-  async findOne(id: number): Promise<ExerciseRecordEntity> {
-    return await this.exerciseRecordRepository.findOne({ where: { id } });
+  async findOne(id: number, userId: string): Promise<ExerciseRecordEntity> {
+    return await this.exerciseRecordRepository.findOne({ where: { id, userId } });
   }
 
   async create(userId: string, createExerciseRecordDto: CreateExerciseRecordDto): Promise<ExerciseRecordEntity> {
@@ -43,10 +43,10 @@ export class ExerciseRecordService {
       exerciseDay: { id: exerciseDayId },
       userId
     });
-    return await this.findOne(id);
+    return await this.findOne(id, userId);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.exerciseRecordRepository.delete(id);
+  async delete(id: number, userId: string): Promise<void> {
+    await this.exerciseRecordRepository.delete({id, userId});
   }
 }

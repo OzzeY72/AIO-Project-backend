@@ -9,6 +9,7 @@ import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from './dto';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from './dto';
 import { Response } from 'express';
 import { handleControllerError } from '@/common/utils';
+import { ExerciseDay, ExerciseEntity } from './entities';
 
 @ApiTags('Sport')
 @ApiBearerAuth()
@@ -59,16 +60,18 @@ export class SportController {
   @Delete('exercises/:id')
   @ApiOperation({ summary: 'Delete an exercise' })
   @ApiResponse({ status: 200, description: 'The exercise has been successfully deleted.' })
-  async deleteExercise(@Param('id') id: number, @Res() res: Response) {
+  async deleteExercise(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
+    const userId = req.user.sub;
+
     return handleControllerError(res, async () => 
-      res.status(HttpStatus.OK).json(await this.sportService.deleteExercise(id))
+      res.status(HttpStatus.OK).json(await this.sportService.deleteExercise(id, userId))
     );
   }
 
   // 2. CRUD для Exercise Day
   @Get('exercise-days')
   @ApiOperation({ summary: 'Get all exercise days' })
-  @ApiResponse({ status: 200, description: 'Return all exercise days.', type: [CreateExerciseDayDto] })
+  @ApiResponse({ status: 200, description: 'Return all exercise days.', type: [ExerciseDay] })
   async getAllExerciseDays(@Req() req: any, @Res() res: Response) {
     const userId = req.user.sub;
 
@@ -107,9 +110,11 @@ export class SportController {
   @Delete('exercise-days/:id')
   @ApiOperation({ summary: 'Delete an exercise day' })
   @ApiResponse({ status: 200, description: 'The exercise day has been successfully deleted.' })
-  async deleteExerciseDay(@Param('id') id: number, @Res() res: Response) {
+  async deleteExerciseDay(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
+    const userId = req.user.sub;
+
     return handleControllerError(res, async () => 
-      res.status(HttpStatus.OK).json(await this.sportService.deleteExerciseDay(id))
+      res.status(HttpStatus.OK).json(await this.sportService.deleteExerciseDay(id, userId))
     );
   }
 
@@ -155,9 +160,11 @@ export class SportController {
   @Delete('exercise-records/:id')
   @ApiOperation({ summary: 'Delete an exercise record' })
   @ApiResponse({ status: 200, description: 'The exercise record has been successfully deleted.' })
-  async deleteExerciseRecord(@Param('id') id: number, @Res() res: Response) {
+  async deleteExerciseRecord(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
+    const userId = req.user.sub;
+
     return handleControllerError(res, async () => 
-      res.status(HttpStatus.OK).json(await this.sportService.deleteExerciseRecord(id))
+      res.status(HttpStatus.OK).json(await this.sportService.deleteExerciseRecord(id, userId))
     );
   }
 
@@ -203,9 +210,11 @@ export class SportController {
   @Delete('plan-exercises/:id')
   @ApiOperation({ summary: 'Delete a plan exercise' })
   @ApiResponse({ status: 200, description: 'The plan exercise has been successfully deleted.' })
-  async deletePlanExercise(@Param('id') id: number, @Res() res: Response) {
+  async deletePlanExercise(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
+    const userId = req.user.sub;
+
     return handleControllerError(res, async () => 
-      res.status(HttpStatus.OK).json(await this.sportService.deletePlanExercise(id))
+      res.status(HttpStatus.OK).json(await this.sportService.deletePlanExercise(id, userId))
     );
   }
 
@@ -251,9 +260,11 @@ export class SportController {
   @Delete('plan-exercise-days/:id')
   @ApiOperation({ summary: 'Delete a plan exercise day' })
   @ApiResponse({ status: 200, description: 'The plan exercise day has been successfully deleted.' })
-  async deletePlanExerciseDay(@Param('id') id: number, @Res() res: Response) {
+  async deletePlanExerciseDay(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
+    const userId = req.user.sub;
+
     return handleControllerError(res, async () => 
-      res.status(HttpStatus.OK).json(await this.sportService.deletePlanExerciseDay(id))
+      res.status(HttpStatus.OK).json(await this.sportService.deletePlanExerciseDay(id, userId))
     );
   }
 }

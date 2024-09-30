@@ -11,8 +11,10 @@ export class ExerciseService {
     private readonly exerciseRepository: Repository<ExerciseEntity>,
   ) {}
 
-  async findAll(options?: Partial<ExerciseEntity> | null): Promise<ExerciseEntity[]> {
-    return options ? await this.exerciseRepository.find({where: options}) : await this.exerciseRepository.find();
+  async findAll(userId: string, options?: Partial<ExerciseEntity> | null): Promise<ExerciseEntity[]> {
+    return options 
+      ? await this.exerciseRepository.find({where: {...options, userId}}) 
+      : await this.exerciseRepository.find({where: {userId}});
   }
 
   async findOne(id: number, userId: string): Promise<ExerciseEntity> {
@@ -35,7 +37,7 @@ export class ExerciseService {
     return await this.findOne(id, userId);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.exerciseRepository.delete(id);
+  async delete(id: number, userId: string): Promise<void> {
+    await this.exerciseRepository.delete({id, userId});
   }
 }

@@ -13,25 +13,22 @@ export class PlanExerciseDayService {
     private planExerciseService: PlanExerciseService,
   ) {}
 
-  async findAll(options?: Partial<PlanExerciseDay> | null): Promise<PlanExerciseDay[]> {
+  async findAll(userId: string, options?: Partial<PlanExerciseDay> | null): Promise<PlanExerciseDay[]> {
     return options 
-      ? await this.planExerciseDayRepository.find({ relations: ['planExercise'], where: options})
-      : await this.planExerciseDayRepository.find({ relations: ['planExercise'] })
+      ? await this.planExerciseDayRepository.find({ relations: ['planExercises'], where: {...options, userId}})
+      : await this.planExerciseDayRepository.find({ relations: ['planExercises'], where: {userId}})
   }
 
   async findOne(id: number, userId: string): Promise<PlanExerciseDay> {
     return await this.planExerciseDayRepository.findOne({
       where: { id, userId },
-      relations: ['planExercise'],
+      relations: ['planExercises'],
     });
   }
 
   async create(userId: string, createPlanExerciseDayDto: CreatePlanExerciseDayDto): Promise<PlanExerciseDay> {
-    const { planExercises } = createPlanExerciseDayDto;
-
     const planExerciseDay = this.planExerciseDayRepository.create({
       ...createPlanExerciseDayDto,
-      planExercises: planExercises.map(pe => ({ exercise: { id: pe.exerciseId }, sets: pe.sets, reps: pe.reps })),
       userId
     });
 
@@ -39,16 +36,14 @@ export class PlanExerciseDayService {
   }
 
   async update(id: number, userId: string, updatePlanExerciseDayDto: UpdatePlanExerciseDayDto): Promise<PlanExerciseDay> {
-    const { planExercises } = updatePlanExerciseDayDto;
-
     await this.planExerciseDayRepository.update(id, {
       ...updatePlanExerciseDayDto,
-      planExercises: planExercises.map(pe => ({ exercise: { id: pe.exerciseId }, sets: pe.sets, reps: pe.reps })), }),
       userId
+    })
     return await this.findOne(id, userId);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.planExerciseDayRepository.delete(id);
+  async delete(id: number, userId: string): Promise<void> {
+    await this.planExerciseDayRepository.delete({id, userId});
   }
 }

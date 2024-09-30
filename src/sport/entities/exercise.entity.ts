@@ -3,7 +3,7 @@ import { ExerciseRecordEntity } from './exercise-record.entity';
 import { PlanExercise } from './plan-exercise.entity';
 
 @Entity('exercise')
-@Unique(['id', 'name'])
+@Unique(['name'])
 export class ExerciseEntity {
   @PrimaryGeneratedColumn()
   id: number;
