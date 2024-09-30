@@ -14,14 +14,14 @@ export class HealthStatRepository {
   async findUserStat(userId: string, healthId: number): Promise<HealthStat | undefined> {
     return await this.repository.findOne({ 
       where: { 
-        user: { userId: userId } ,
+        userId,
         health: { id: healthId }
       } 
     });
   }
   async saveUserStat(userId: string, healthId: number, stats: { totalDays: number, longestStreak: number }): Promise<HealthStat | undefined> {
     const stat = this.repository.upsert({
-        user: {userId: userId},
+      userId,
         health: {id: healthId},
         ...stats
     },

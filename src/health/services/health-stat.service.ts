@@ -41,9 +41,9 @@ export class HealthStatsService {
   async updateUserStats() {
     const registers = await this.healthRegisterService.getAll();
     for (const register of registers) {
-        const stats = await this.healthRecordService.calculateUserStats(register.user.userId, register.health.id);
+        const stats = await this.healthRecordService.calculateUserStats(register.userId, register.health.id);
         console.log(stats);
-        await this.saveUserStats(register.user.userId, register.health.id, stats);
+        await this.saveUserStats(register.userId, register.health.id, stats);
     }
   }
 

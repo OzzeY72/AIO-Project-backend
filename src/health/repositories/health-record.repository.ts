@@ -20,7 +20,7 @@ export class HealthRecordRepository {
         const endOfMonth = month ? new Date(year, month, 0) : new Date(2200,0,1); 
         return await this.repository.find({
             where: {
-                user: { userId: userId },
+                userId,
                 health: { id: healthId },
                 streakBegin: Between(startOfMonth, endOfMonth),
             },
@@ -31,7 +31,7 @@ export class HealthRecordRepository {
         return await this.repository.findOne({ 
             where: {
                 streakEnd: streakEnd,
-                user: {userId: userId},
+                userId,
                 health: {id: healthId},
             } 
         });
@@ -49,7 +49,7 @@ export class HealthRecordRepository {
     async findLatestHealthRecord(userId: string, healthId: number): Promise<HealthRecord | undefined> {
         return await this.repository.findOne({
             where: {
-                user: { userId: userId },
+                userId,
                 health: { id: healthId },
             },
           order: { id: 'DESC' },
@@ -66,11 +66,11 @@ export class HealthRecordRepository {
         const healthRecord = await this.repository.create({
             streakBegin, 
             streakEnd,
-            user: {userId: userId},
+            userId,
             health: {id: healthId}
         });
         console.log(healthRecord);
-        console.log(healthRecord.user);
+        console.log(healthRecord.userId);
         return await this.repository.save(healthRecord);
     }
 }

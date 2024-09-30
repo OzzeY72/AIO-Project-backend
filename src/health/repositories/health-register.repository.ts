@@ -13,7 +13,7 @@ export class HealthRegisterRepository {
     async findByUserAndHealth(userId: string, healthId: number): Promise<HealthRegister | undefined> {
         return await this.repository.findOne({ 
             where: {
-                user: {userId: userId},
+                userId,
                 health: {id: healthId},
             } 
         });
@@ -41,7 +41,7 @@ export class HealthRegisterRepository {
         const healthRegister = await this.repository.create({
             countPerDay, 
             pricePerThing,
-            user: {id: 1, userId: userId},
+            userId,
             health: {id: healthId}
         });
         const query = await this.repository.upsert(healthRegister,['user','health']);

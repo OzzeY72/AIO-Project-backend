@@ -3,7 +3,7 @@ import { Health } from '@/health/entities';
 import { User } from '@/user/entities';
 
 @Entity()
-@Unique(['user', 'health'])
+@Unique(['userId', 'health'])
 export class HealthRegister{
     @PrimaryGeneratedColumn()
     id: number;
