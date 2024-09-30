@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService } from '@/budget/services';
 import { ProductRepository } from '@/budget/repositories';
 import { ProductDtoRequest, ProductUpdateDtoRequest, ProductDtoResponse, toProductDtoResponse, ProductGetDtoRequest } from '@/budget/dto';
-import { createMockEntityTag, createMockEntityCategory } from '@/tests/factories/budget.factory'; 
+import { createMockEntityTag, createMockEntityCategory } from '../../factories/budget.factory'; 
 import { ProductEntity } from '@/budget/entities';
 
 const mockEntityProduct = {

@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { AuthorizationService } from '@/authorization';
 import { ERROR_MESSAGES } from '@/common/error-messages';
-import { verify } from 'crypto';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;

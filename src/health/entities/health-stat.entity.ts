@@ -17,7 +17,6 @@ export class HealthStat {
     @ManyToOne(() => Health, (health) => health.healthRecords)
     health: Health;
 
-    @ManyToOne(() => User, (user) => user.healthRecords)
-    @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
-    user: User;
+    @Column({ name: "userId", nullable: false })
+    userId: string;
 }

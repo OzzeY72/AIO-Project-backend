@@ -6,7 +6,7 @@ import { User } from '@/user/entities';
 import { OpenID } from '@/interfaces/openid';
 import { v4 as uuidv4 } from 'uuid';
 import { UserCreateDto } from '@/user/dto';
-import { createMockUser } from '@/tests/factories/user.factory';
+import { createMockUser } from '../../factories/user.factory';
 
 describe('UserService', () => {
     let userService: UserService;

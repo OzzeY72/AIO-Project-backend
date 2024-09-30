@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryService } from '@/budget/services';
 import { CategoryRepository } from '@/budget/repositories';
-import { createMockCategory, createMockEntityCategory } from '@/tests/factories/budget.factory';
+import { createMockCategory, createMockEntityCategory } from '../../factories/budget.factory';
 import { CategoryDtoRequest, CategoryDtoResponse, toCategoryDtoResponse } from '@/budget/dto';
 
 describe('CategoryService', () => {

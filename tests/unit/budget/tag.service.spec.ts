@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TagService } from '@/budget/services';
 import { TagRepository } from '@/budget/repositories';
-import { createMockEntityTag, createMockEntityCategory } from '@/tests/factories/budget.factory';
+import { createMockEntityTag, createMockEntityCategory } from '../../factories/budget.factory';
 import { TagDtoRequest, TagDtoUpdateRequest, toTagDtoResponse, TagDtoResponse } from '@/budget/dto';
 import { CategoryEntity, ProductEntity, TagEntity } from '@/budget/entities';
 

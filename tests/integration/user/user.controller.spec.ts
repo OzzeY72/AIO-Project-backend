@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { UserService } from '../../../user/user.service';
+import { UserService } from '../../../src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { createTestUser } from '@/tests/factories/user.factory';
-import { createTestModule } from '@/tests/test.module';
+import { createTestUser } from '../../factories/user.factory';
+import { createTestModule } from '../../test.module';
 import { UserController } from '@/user';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@/user/entities';
+
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -15,11 +16,12 @@ describe('UserController', () => {
   let accessToken: string;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await createTestModule({
+    const moduleFixture: TestingModule = await (await createTestModule({
       controllers: [UserController],
       providers: [UserService],
-      imports: [TypeOrmModule.forFeature([User])]}
-    ).compile();
+      imports: []
+    }))
+    .compile();
     
     app = moduleFixture.createNestApplication();
     jwtService = app.get<JwtService>(JwtService);

@@ -42,10 +42,4 @@ export class User {
     @Column({ type: 'timestamp', nullable: true })
     //@Column({ type: 'date', nullable: true })
     lastLogin: Date;
-
-    @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.user)
-    healthRecords: HealthRecord[];
-
-    @OneToMany(() => ProductEntity, (product) => product.userId, { nullable: true })
-    products: ProductEntity[];
 }

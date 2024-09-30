@@ -3,7 +3,7 @@ import { BudgetService } from '@/budget/services';
 import { CategoryService, TagService, ProductService } from '@/budget/services';
 import { CategoryDtoRequest, CategoryDtoResponse, ProductDtoRequest, ProductGetDtoRequest, ProductUpdateDtoRequest } from '@/budget/dto';
 import { TagDtoRequest, TagDtoUpdateRequest } from '@/budget/dto';
-import { createMockCategory, createMockProduct, createMockTag } from '@/tests/factories/budget.factory';
+import { createMockCategory, createMockProduct, createMockTag } from '../../factories/budget.factory';
 
 describe('BudgetService', () => {
   let budgetService: BudgetService;

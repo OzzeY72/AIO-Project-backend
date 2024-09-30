@@ -5,7 +5,7 @@ import { OAuthFactory } from '@/authorization/factories';
 import { UserService } from '@/user/user.service';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
-import { createMockUser } from '@/tests/factories/user.factory';
+import { createMockUser } from '../../factories/user.factory';
 import { ERROR_MESSAGES } from '@/common/error-messages';
 import { UnauthorizedException } from '@nestjs/common';
 

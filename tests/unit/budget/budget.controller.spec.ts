@@ -4,9 +4,8 @@ import { BudgetService } from '@/budget/services';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
 import { CategoryDtoResponse, TagDtoResponse, ProductDtoResponse } from '@/budget/dto';
-import { createMockProduct, createMockTag, createMockCategory } from '@/tests/factories/budget.factory';
+import { createMockProduct, createMockTag, createMockCategory } from '../../factories/budget.factory';
 import { JwtService } from '@nestjs/jwt';
-import { verify } from 'crypto';
 
 // Mock data
 const mockCategory = createMockCategory() as CategoryDtoResponse;
