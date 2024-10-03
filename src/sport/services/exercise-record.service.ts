@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ExerciseRecordEntity } from '../entities';
 import { CreateExerciseRecordDto, UpdateExerciseRecordDto } from '../dto';
+import { groupBy } from '@/common/utils';
 
 @Injectable()
 export class ExerciseRecordService {
@@ -13,12 +14,29 @@ export class ExerciseRecordService {
 
   async findAll(userId: string, options?: Partial<ExerciseRecordEntity> | null): Promise<ExerciseRecordEntity[]> {
     return options
-      ? await this.exerciseRecordRepository.find({where: {...options, userId}})
-      : await this.exerciseRecordRepository.find({where: {userId}})
+      ? await this.exerciseRecordRepository.find({ relations: ['exercise'], where: {...options, userId}})
+      : await this.exerciseRecordRepository.find({ relations: ['exercise'], where: {userId}})
   }
 
   async findOne(id: number, userId: string): Promise<ExerciseRecordEntity> {
-    return await this.exerciseRecordRepository.findOne({ where: { id, userId } });
+    return await this.exerciseRecordRepository.findOne({ relations: ['exercise'], where: { id, userId } });
+  }
+
+  async getRecordsGroupedByDay(planExerciseId: number, limit: number): Promise<ExerciseRecordEntity[][]> {
+    // Получаем записи упражнений по плану
+    const records = await this.exerciseRecordRepository
+      .createQueryBuilder('exercise_record')
+      .innerJoinAndSelect('exercise_record.exerciseDay', 'exercise_day')
+      .innerJoin('exercise_record.exercise', 'exercise')                
+      .where('exercise.id = :planExerciseId', { planExerciseId })
+      .orderBy('exercise_day.date', 'ASC')                    
+      .limit(limit)                                           
+      .getMany();
+
+    // Группируем по дню выполнения (ExerciseDay)
+    const groupedRecords = groupBy(records, record => record.exerciseDay.id);
+
+    return groupedRecords;
   }
 
   async create(userId: string, createExerciseRecordDto: CreateExerciseRecordDto): Promise<ExerciseRecordEntity> {
@@ -35,10 +53,11 @@ export class ExerciseRecordService {
   }
 
   async update(id: number, userId: string, updateExerciseRecordDto: UpdateExerciseRecordDto): Promise<ExerciseRecordEntity> {
-    const { exerciseId, exerciseDayId } = updateExerciseRecordDto;
+    const { exerciseId, exerciseDayId, weight, reps } = updateExerciseRecordDto;
 
     await this.exerciseRecordRepository.update(id, {
-      ...updateExerciseRecordDto,
+      weight,
+      reps,
       exercise: { id: exerciseId },
       exerciseDay: { id: exerciseDayId },
       userId

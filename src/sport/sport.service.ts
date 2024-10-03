@@ -10,6 +10,8 @@ import { CreateExerciseDayDto, UpdateExerciseDayDto } from './dto';
 import { CreateExerciseRecordDto, UpdateExerciseRecordDto } from './dto';
 import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from './dto';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from './dto';
+import { ResponseAnalysisDayDto } from './dto'; 
+import { ExerciseAnalysisService } from './services/exercise-analysis.service';
 
 @Injectable()
 export class SportService {
@@ -19,7 +21,17 @@ export class SportService {
     private readonly exerciseRecordService: ExerciseRecordService,
     private readonly planExerciseService: PlanExerciseService,
     private readonly planExerciseDayService: PlanExerciseDayService,
+    private readonly exerciseAnalysisService: ExerciseAnalysisService
   ) {}
+
+  async analyseExerciseDay(userId: string, weekDay: number): Promise<ResponseAnalysisDayDto> {
+    const planDay = await this.planExerciseDayService.getPlanDayByWeekDay(weekDay, userId);
+
+    return ({
+      planExercise: await this.exerciseAnalysisService.calculateAnalysedSets(planDay),
+      weekDay
+    });
+  }
 
   // Exercise Management
   async getAllExercises(userId: string, options?: Partial<ExerciseEntity>) {

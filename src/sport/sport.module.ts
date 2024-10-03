@@ -6,6 +6,7 @@ import { SportController } from './sport.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay } from './entities';
 import { ExerciseDayService, ExerciseRecordService, ExerciseService, PlanExerciseDayService, PlanExerciseService } from './services';
+import { ExerciseAnalysisService } from './services'; 
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ExerciseDayService, ExerciseRecordService, ExerciseService, PlanExercis
     ExerciseService,
     PlanExerciseService,
     PlanExerciseDayService,
+    ExerciseAnalysisService,
   ],
 })
 export class SportModule {}

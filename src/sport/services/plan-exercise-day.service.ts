@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { PlanExerciseDay } from '../entities';
 import { PlanExerciseService } from './plan-exercise.service';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from '../dto';
+import { groupBy } from '@/common/utils';
 
 @Injectable()
 export class PlanExerciseDayService {
@@ -24,6 +25,18 @@ export class PlanExerciseDayService {
       where: { id, userId },
       relations: ['planExercises'],
     });
+  }
+
+  async getPlanDayByWeekDay(weekDay: number, userId: string): Promise<PlanExerciseDay> {
+    const records = await this.planExerciseDayRepository.findOne({ 
+      relations: ['planExercises', 'planExercises.exercise' ],
+      where: {
+        weekDay,
+        userId,
+      }
+    })
+
+    return records;
   }
 
   async create(userId: string, createPlanExerciseDayDto: CreatePlanExerciseDayDto): Promise<PlanExerciseDay> {

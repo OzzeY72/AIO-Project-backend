@@ -13,14 +13,14 @@ export class ExerciseDayService {
 
   async findAll(userId: string, options?: Partial<ExerciseDay> | null): Promise<ExerciseDay[]> {
     return options 
-      ? await this.exerciseDayRepository.find({ relations: ['exerciseRecords'], where: {...options, userId} })
-      : await this.exerciseDayRepository.find({ relations: ['exerciseRecords'], where: {userId} });
+      ? await this.exerciseDayRepository.find({ relations: ['exerciseRecords', 'exerciseRecords.exercise'], where: {...options, userId} })
+      : await this.exerciseDayRepository.find({ relations: ['exerciseRecords', 'exerciseRecords.exercise'], where: {userId} });
   }
 
   async findOne(id: number, userId: string): Promise<ExerciseDay> {
     return await this.exerciseDayRepository.findOne({
       where: { id, userId },
-      relations: ['exerciseRecords'],
+      relations: ['exerciseRecords', 'exerciseRecords.exercise'],
     });
   }
 

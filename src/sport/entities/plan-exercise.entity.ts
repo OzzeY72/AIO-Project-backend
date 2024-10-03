@@ -21,4 +21,7 @@ export class PlanExercise {
 
   @Column({ type: 'int' })
   reps: number;
+
+  @Column({ type: 'int', nullable: true })
+  weight: number;
 }

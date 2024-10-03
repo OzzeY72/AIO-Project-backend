@@ -8,3 +8,6 @@ export * from './create-plan-exercise-day.dto';
 export * from './update-plan-exercise-day.dto';
 export * from './create-exercise-day.dto';
 export * from './update-exercise-day.dto';
+export * from './response-analysis-exercise.dto';
+export * from './request-analysis-exercise.dto';
+export * from './response-analysis-day.dto';

@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, UseGuards, Req } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, UseGuards, Req, Query } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/authorization';
 import { SportService } from './sport.service';
 import { CreateExerciseDto, UpdateExerciseDto } from './dto';
@@ -7,9 +7,11 @@ import { CreateExerciseDayDto, UpdateExerciseDayDto } from './dto';
 import { CreateExerciseRecordDto, UpdateExerciseRecordDto } from './dto';
 import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from './dto';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from './dto';
+import { ResponseAnalysisExerciseDto } from './dto';
 import { Response } from 'express';
 import { handleControllerError } from '@/common/utils';
 import { ExerciseDay, ExerciseEntity } from './entities';
+import { RequestAnalysisExerciseDto } from './dto';
 
 @ApiTags('Sport')
 @ApiBearerAuth()
@@ -17,6 +19,20 @@ import { ExerciseDay, ExerciseEntity } from './entities';
 @UseGuards(JwtAuthGuard)
 export class SportController {
   constructor(private readonly sportService: SportService) {}
+
+  @Get('analyse')
+  @ApiOperation({ summary: 'Analyse exercise weight for day' })
+  @ApiResponse({ status: 200, description: 'Return analysed day', type: [ResponseAnalysisExerciseDto] })
+  async analyseExerciseDay(
+    @Req() req: any, 
+    @Query() query: RequestAnalysisExerciseDto,
+    @Res() res: Response) {
+    const userId = req.user.sub;
+
+    return handleControllerError(res, async () => 
+      res.status(HttpStatus.OK).json(await this.sportService.analyseExerciseDay(userId, query.weekDay))
+    );
+  }
 
   // 1. CRUD для Exercise
   @Get('exercises')
