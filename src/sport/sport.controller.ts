@@ -2,16 +2,17 @@ import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, UseGu
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/authorization';
 import { SportService } from './sport.service';
-import { CreateExerciseDto, UpdateExerciseDto } from './dto';
+import { CreateExerciseDto, ResponseAnalysisDayDto, UpdateExerciseDto } from './dto';
 import { CreateExerciseDayDto, UpdateExerciseDayDto } from './dto';
 import { CreateExerciseRecordDto, UpdateExerciseRecordDto } from './dto';
 import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from './dto';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from './dto';
-import { ResponseAnalysisExerciseDto } from './dto';
+import { ResponseAnalysisExerciseDto, ResponsePlanExerciseDto } from './dto';
 import { Response } from 'express';
 import { handleControllerError } from '@/common/utils';
 import { ExerciseDay, ExerciseEntity } from './entities';
-import { RequestAnalysisExerciseDto } from './dto';
+import { ResponseExerciseDay } from './dto'; 
+import { RequestAnalysisExerciseDto, ResponseExerciseRecordDto } from './dto';
 
 @ApiTags('Sport')
 @ApiBearerAuth()
@@ -22,7 +23,7 @@ export class SportController {
 
   @Get('analyse')
   @ApiOperation({ summary: 'Analyse exercise weight for day' })
-  @ApiResponse({ status: 200, description: 'Return analysed day', type: [ResponseAnalysisExerciseDto] })
+  @ApiResponse({ status: 200, description: 'Return analysed day', type: ResponseAnalysisDayDto })
   async analyseExerciseDay(
     @Req() req: any, 
     @Query() query: RequestAnalysisExerciseDto,
@@ -87,7 +88,7 @@ export class SportController {
   // 2. CRUD для Exercise Day
   @Get('exercise-days')
   @ApiOperation({ summary: 'Get all exercise days' })
-  @ApiResponse({ status: 200, description: 'Return all exercise days.', type: [ExerciseDay] })
+  @ApiResponse({ status: 200, description: 'Return all exercise days.', type: [ResponseExerciseDay] })
   async getAllExerciseDays(@Req() req: any, @Res() res: Response) {
     const userId = req.user.sub;
 
@@ -99,11 +100,11 @@ export class SportController {
   @Post('exercise-days')
   @ApiOperation({ summary: 'Create a new exercise day' })
   @ApiResponse({ status: 201, description: 'The exercise day has been successfully created.', type: CreateExerciseDayDto })
-  async createExerciseDay(@Req() req: any, @Body() createExerciseDayDto: CreateExerciseDayDto, @Res() res: Response) {
+  async createExerciseDay(@Req() req: any, @Res() res: Response) {
     const userId = req.user.sub;
 
     return handleControllerError(res, async () => 
-      res.status(HttpStatus.CREATED).json(await this.sportService.createExerciseDay(userId, createExerciseDayDto))
+      res.status(HttpStatus.CREATED).json(await this.sportService.createExerciseDay(userId, {date: new Date()}))
     );
   }
 
@@ -137,7 +138,7 @@ export class SportController {
   // 3. CRUD для Exercise Record
   @Get('exercise-records')
   @ApiOperation({ summary: 'Get all exercise records' })
-  @ApiResponse({ status: 200, description: 'Return all exercise records.', type: [CreateExerciseRecordDto] })
+  @ApiResponse({ status: 200, description: 'Return all exercise records.', type: [ResponseExerciseRecordDto] })
   async getAllExerciseRecords(@Req() req: any, @Res() res: Response) {
     const userId = req.user.sub;
 
@@ -148,7 +149,7 @@ export class SportController {
 
   @Post('exercise-records')
   @ApiOperation({ summary: 'Create a new exercise record' })
-  @ApiResponse({ status: 201, description: 'The exercise record has been successfully created.', type: CreateExerciseRecordDto })
+  @ApiResponse({ status: 201, description: 'The exercise record has been successfully created.', type: ResponseExerciseRecordDto })
   async createExerciseRecord(@Req() req: any, @Body() createExerciseRecordDto: CreateExerciseRecordDto, @Res() res: Response) {
     const userId = req.user.sub; 
 
@@ -159,7 +160,7 @@ export class SportController {
 
   @Put('exercise-records/:id')
   @ApiOperation({ summary: 'Update an existing exercise record' })
-  @ApiResponse({ status: 200, description: 'The exercise record has been successfully updated.', type: UpdateExerciseRecordDto })
+  @ApiResponse({ status: 200, description: 'The exercise record has been successfully updated.', type: ResponseExerciseRecordDto })
   async updateExerciseRecord(
     @Req() req: any, 
     @Param('id') id: number,
@@ -187,7 +188,7 @@ export class SportController {
   // 4. CRUD для Plan Exercise
   @Get('plan-exercises')
   @ApiOperation({ summary: 'Get all plan exercises' })
-  @ApiResponse({ status: 200, description: 'Return all plan exercises.', type: [CreatePlanExerciseDto] })
+  @ApiResponse({ status: 200, description: 'Return all plan exercises.', type: [ResponsePlanExerciseDto] })
   async getAllPlanExercises(@Req() req: any, @Res() res: Response) {
     const userId = req.user.sub; 
 
@@ -198,7 +199,7 @@ export class SportController {
 
   @Post('plan-exercises')
   @ApiOperation({ summary: 'Create a new plan exercise' })
-  @ApiResponse({ status: 201, description: 'The plan exercise has been successfully created.', type: CreatePlanExerciseDto })
+  @ApiResponse({ status: 201, description: 'The plan exercise has been successfully created.', type: ResponsePlanExerciseDto })
   async createPlanExercise(@Req() req: any, @Body() createPlanExerciseDto: CreatePlanExerciseDto, @Res() res: Response) {
     const userId = req.user.sub;
 
@@ -209,7 +210,7 @@ export class SportController {
 
   @Put('plan-exercises/:id')
   @ApiOperation({ summary: 'Update an existing plan exercise' })
-  @ApiResponse({ status: 200, description: 'The plan exercise has been successfully updated.', type: UpdatePlanExerciseDto })
+  @ApiResponse({ status: 200, description: 'The plan exercise has been successfully updated.', type: ResponsePlanExerciseDto })
   async updatePlanExercise(
     @Req() req: any, 
     @Param('id') id: number,

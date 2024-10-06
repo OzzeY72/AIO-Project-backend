@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlanExercise } from '../entities';
-import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from '../dto';
+import { CreatePlanExerciseDto, UpdatePlanExerciseDto, ResponsePlanExerciseDto } from '../dto';
 import { In } from 'typeorm';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class PlanExerciseService {
     private readonly planExerciseRepository: Repository<PlanExercise>,
   ) {}
 
-  async findAll(userId: string, options?: Partial<PlanExercise> | null): Promise<PlanExercise[]> {
+  async findAll(userId: string, options?: Partial<PlanExercise> | null): Promise<ResponsePlanExerciseDto[]> {
     const queryBuilder = this.planExerciseRepository.createQueryBuilder('planExercise')
       .where('planExercise.userId = :userId', { userId });
 
@@ -26,21 +26,23 @@ export class PlanExerciseService {
       .leftJoinAndSelect('planExercise.exercise', 'exercise');
       
     const result = await queryBuilder.getMany();
-    return result;
+    return result.map(plan => this.toResponsePlanExercise(plan));
   }
 
-  async findOne(id: number, userId: string): Promise<PlanExercise> {
-    return await this.planExerciseRepository.findOne({ where: { id, userId } });
+  async findOne(id: number, userId: string): Promise<ResponsePlanExerciseDto> {
+    const res = await this.planExerciseRepository.findOne({ where: { id, userId } });
+    return this.toResponsePlanExercise(res);
   }
 
-  async findByIds(ids: number[], userId: string): Promise<PlanExercise[]> {
-    return await this.planExerciseRepository.findBy({ 
+  async findByIds(ids: number[], userId: string): Promise<ResponsePlanExerciseDto[]> {
+    const res = await this.planExerciseRepository.findBy({ 
       id: In(ids),
       userId
     });
+    return res.map(plan => this.toResponsePlanExercise(plan));
   }
   
-  async create(userId: string, createPlanExerciseDto: CreatePlanExerciseDto): Promise<PlanExercise> {
+  async create(userId: string, createPlanExerciseDto: CreatePlanExerciseDto): Promise<ResponsePlanExerciseDto> {
     const { exerciseId } = createPlanExerciseDto;
 
     const planExercise = this.planExerciseRepository.create({
@@ -49,10 +51,11 @@ export class PlanExerciseService {
       userId
     });
 
-    return await this.planExerciseRepository.save(planExercise);
+    const res = await this.planExerciseRepository.save(planExercise);
+    return this.toResponsePlanExercise(res);
   }
 
-  async update(id: number, userId: string, updatePlanExerciseDto: UpdatePlanExerciseDto): Promise<PlanExercise> {
+  async update(id: number, userId: string, updatePlanExerciseDto: UpdatePlanExerciseDto): Promise<ResponsePlanExerciseDto> {
     const { exerciseId  } = updatePlanExerciseDto;
     await this.planExerciseRepository.update(id, {
       ...updatePlanExerciseDto,
@@ -64,5 +67,15 @@ export class PlanExerciseService {
 
   async delete(id: number, userId: string): Promise<void> {
     await this.planExerciseRepository.delete({id, userId});
+  }
+
+  toResponsePlanExercise(exerciseRecord: PlanExercise): ResponsePlanExerciseDto {
+    return ({
+      id: exerciseRecord.id,
+      exercise: exerciseRecord.exercise.name,
+      sets: exerciseRecord.sets,
+      reps: exerciseRecord.reps,
+      planExerciseDayId: exerciseRecord.planExerciseDay.id,
+    });
   }
 }

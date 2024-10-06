@@ -2,13 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ExerciseDay } from '../entities';
-import { CreateExerciseDayDto, UpdateExerciseDayDto } from '../dto';
+import { ExerciseRecordService } from './'; 
+import { CreateExerciseDayDto, ResponseExerciseDay, UpdateExerciseDayDto } from '../dto';
 
 @Injectable()
 export class ExerciseDayService {
   constructor(
     @InjectRepository(ExerciseDay)
     private readonly exerciseDayRepository: Repository<ExerciseDay>,
+    private readonly exerciseRecordService: ExerciseRecordService,
   ) {}
 
   async findAll(userId: string, options?: Partial<ExerciseDay> | null): Promise<ExerciseDay[]> {
@@ -46,4 +48,11 @@ export class ExerciseDayService {
       userId,
     });
   }
+
+  toResponseExerciseDayDto(exerciseDay: ExerciseDay): ResponseExerciseDay {
+    return ({
+      ...exerciseDay,
+      exerciseRecords: exerciseDay.exerciseRecords.map((record) => this.exerciseRecordService.toResponseExerciseRecord(record))
+    });
+  } 
 }

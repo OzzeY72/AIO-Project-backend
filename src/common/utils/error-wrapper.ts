@@ -9,7 +9,8 @@ export async function handleControllerError(
     return await controllerMethod();
   } catch (error) {
     console.log(error.message);
-    return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
+    throw error;
+    //return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
   }
 }
 export async function throwServiceError(

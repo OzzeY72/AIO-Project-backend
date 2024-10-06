@@ -28,7 +28,7 @@ export class SportService {
     const planDay = await this.planExerciseDayService.getPlanDayByWeekDay(weekDay, userId);
 
     return ({
-      planExercise: await this.exerciseAnalysisService.calculateAnalysedSets(planDay),
+      planExercises: await this.exerciseAnalysisService.calculateAnalysedSets(planDay),
       weekDay
     });
   }
@@ -53,8 +53,7 @@ export class SportService {
   // Exercise Day Management
   async getAllExerciseDays(userId: string, options?: Partial<ExerciseDay>) {
     const res = await this.exerciseDayService.findAll(userId, options);
-    console.log(res);
-    return res;
+    return res.map(day => this.exerciseDayService.toResponseExerciseDayDto(day));
   }
 
   async createExerciseDay(userId: string, createExerciseDayDto: CreateExerciseDayDto) {

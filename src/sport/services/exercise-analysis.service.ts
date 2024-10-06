@@ -31,7 +31,8 @@ export class ExerciseAnalysisService {
       for (let i = 0; i < planExercise.sets; i++) {
         ret_arr.push({
           ...planExercise,
-          weight: 0
+          weight: 0,
+          exercise: planExercise.exercise.name,
         });
       }
     }
@@ -64,11 +65,13 @@ export class ExerciseAnalysisService {
         result.push({
           ...planExercise,
           weight: baseWeightPerSet + additionalWeight,
+          exercise: planExercise.exercise.name,
         })
       } else {
         result.push({
           ...planExercise,
           weight: baseWeightPerSet,
+          exercise: planExercise.exercise.name,
         })
       }
     }

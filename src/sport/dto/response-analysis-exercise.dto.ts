@@ -3,12 +3,8 @@ import { IsDate, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseAnalysisExerciseDto {
-  @ApiProperty({ description: 'Exercise of Day', type: ExerciseEntity })
-  exercise: ExerciseEntity;
-
-  @ApiProperty({ description: 'Sets of analysed exercise', type: Number })
-  @IsNumber()
-  sets: number;
+  @ApiProperty({ description: 'Exercise of Day', type: String })
+  exercise: string;
 
   @ApiProperty({ description: 'Reps of analysed exercise', type: Number })
   @IsNumber()
