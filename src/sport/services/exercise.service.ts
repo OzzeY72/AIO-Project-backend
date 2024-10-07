@@ -21,6 +21,10 @@ export class ExerciseService {
     return await this.exerciseRepository.findOne({ where: { id, userId } });
   }
 
+  async findOneByName(exercise: string, userId: string) {
+    return await this.exerciseRepository.findOne({where: {name: exercise, userId}});
+  }
+
   async create(userId: string, createExerciseDto: CreateExerciseDto): Promise<ExerciseEntity> {
     const exercise = this.exerciseRepository.create({
       ...createExerciseDto,

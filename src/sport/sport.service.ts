@@ -12,6 +12,7 @@ import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from './dto';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from './dto';
 import { ResponseAnalysisDayDto } from './dto'; 
 import { ExerciseAnalysisService } from './services/exercise-analysis.service';
+import { toClearDate } from '@/common/utils';
 
 @Injectable()
 export class SportService {
@@ -74,6 +75,15 @@ export class SportService {
   }
 
   async createExerciseRecord(userId: string, createExerciseRecordDto: CreateExerciseRecordDto) {
+    if (!createExerciseRecordDto.exerciseDayId) {
+      const date = toClearDate(new Date());
+      let exerciseDay = await this.exerciseDayService.findOneByDate(date, userId);
+      console.log(1);
+      console.log(exerciseDay);
+      if(!exerciseDay) exerciseDay = await this.exerciseDayService.create(userId, {date});
+      console.log(exerciseDay);
+      createExerciseRecordDto.exerciseDayId = exerciseDay.id;
+    }
     return await this.exerciseRecordService.create(userId, createExerciseRecordDto);
   }
 

@@ -2,17 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ExerciseRecordEntity } from '../entities';
-import { CreateExerciseRecordDto, ResponseExerciseRecordDto, UpdateExerciseRecordDto } from '../dto';
+import { CreateExerciseRecordDto, ResponseExerciseRecordDto, UpdateExerciseRecordDto, RequestExerciseRecordDto } from '../dto';
 import { groupBy } from '@/common/utils';
+import { ExerciseService } from './exercise.service';
 
 @Injectable()
 export class ExerciseRecordService {
   constructor(
     @InjectRepository(ExerciseRecordEntity)
     private readonly exerciseRecordRepository: Repository<ExerciseRecordEntity>,
+    private readonly exerciseService: ExerciseService,
   ) {}
 
-  async findAll(userId: string, options?: Partial<CreateExerciseRecordDto> | null): Promise<ResponseExerciseRecordDto[]> {
+  async findAll(userId: string, options?: Partial<RequestExerciseRecordDto> | null): Promise<ResponseExerciseRecordDto[]> {
     const res = options
       ? await this.exerciseRecordRepository.find({ relations: ['exercise'], where: {...options, userId}})
       : await this.exerciseRecordRepository.find({ relations: ['exercise'], where: {userId}});
@@ -42,27 +44,28 @@ export class ExerciseRecordService {
   }
 
   async create(userId: string, createExerciseRecordDto: CreateExerciseRecordDto): Promise<ResponseExerciseRecordDto> {
-    const { exerciseId, exerciseDayId } = createExerciseRecordDto;
+    const { exercise, exerciseDayId } = createExerciseRecordDto;
+    const exerciseEntity = await this.exerciseService.findOneByName(exercise, userId);
 
     const exerciseRecord = this.exerciseRecordRepository.create({
       ...createExerciseRecordDto,
-      exercise: { id: exerciseId },
+      exercise: exerciseEntity,
       exerciseDay: { id: exerciseDayId },
       userId
     });
-
+    console.log(exerciseRecord);
     const res = await this.exerciseRecordRepository.save(exerciseRecord);
     return this.toResponseExerciseRecord(res);
   }
 
   async update(id: number, userId: string, updateExerciseRecordDto: UpdateExerciseRecordDto): Promise<ResponseExerciseRecordDto> {
-    const { exerciseId, exerciseDayId, weight, reps } = updateExerciseRecordDto;
+    const { exercise, exerciseDayId, weight, reps } = updateExerciseRecordDto;
 
     await this.exerciseRecordRepository.update(id, {
       weight,
       reps,
-      exercise: { id: exerciseId },
-      exerciseDay: { id: exerciseDayId },
+      exercise: { name: exercise },
+      //exerciseDay: { id: exerciseDayId },
       userId
     });
     return await this.findOne(id, userId);

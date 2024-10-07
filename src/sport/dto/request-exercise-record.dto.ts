@@ -1,10 +1,10 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateExerciseRecordDto {
+export class RequestExerciseRecordDto {
   @ApiProperty({ description: 'ID of the associated exercise' })
-  @IsString()
-  exercise: string;
+  @IsNumber()
+  exerciseId: number;
 
   @ApiProperty({ description: 'Weight used in the exercise' })
   @IsNumber()
@@ -14,8 +14,7 @@ export class CreateExerciseRecordDto {
   @IsNumber()
   reps: number;
 
-  @ApiProperty({ description: 'ID of the associated exercise day', required: false })
-  @IsOptional()
+  @ApiProperty({ description: 'ID of the associated exercise day' })
   @IsNumber()
-  exerciseDayId?: number;
+  exerciseDayId: number;
 }

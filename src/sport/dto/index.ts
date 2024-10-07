@@ -14,3 +14,4 @@ export * from './response-analysis-day.dto';
 export * from './response-exercise-record';
 export * from './response-plan-exercise';
 export * from './response-exercise-day.dto';
+export * from './request-exercise-record.dto';

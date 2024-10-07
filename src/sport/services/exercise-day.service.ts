@@ -26,6 +26,13 @@ export class ExerciseDayService {
     });
   }
 
+  async findOneByDate(date: Date, userId: string): Promise<ExerciseDay> {
+    return await this.exerciseDayRepository.findOne({
+      where: { date, userId },
+      relations: ['exerciseRecords', 'exerciseRecords.exercise'],
+    });
+  }
+
   async create(userId: string, createExerciseDayDto: CreateExerciseDayDto): Promise<ExerciseDay> {
     const exerciseDay = this.exerciseDayRepository.create({
       ...createExerciseDayDto,
