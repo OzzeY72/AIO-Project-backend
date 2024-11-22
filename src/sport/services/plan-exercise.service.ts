@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlanExercise } from '../entities';
+import { ExerciseService } from './exercise.service';
 import { CreatePlanExerciseDto, UpdatePlanExerciseDto, ResponsePlanExerciseDto } from '../dto';
 import { In } from 'typeorm';
 
@@ -10,6 +11,7 @@ export class PlanExerciseService {
   constructor(
     @InjectRepository(PlanExercise)
     private readonly planExerciseRepository: Repository<PlanExercise>,
+    private readonly exerciseService: ExerciseService, 
   ) {}
 
   async findAll(userId: string, options?: Partial<PlanExercise> | null): Promise<ResponsePlanExerciseDto[]> {
@@ -43,11 +45,12 @@ export class PlanExerciseService {
   }
   
   async create(userId: string, createPlanExerciseDto: CreatePlanExerciseDto): Promise<ResponsePlanExerciseDto> {
-    const { exerciseId } = createPlanExerciseDto;
-
+    const { exerciseId, planExerciseDayId } = createPlanExerciseDto;
+    const exercise = await this.exerciseService.findOne(exerciseId, userId);
     const planExercise = this.planExerciseRepository.create({
       ...createPlanExerciseDto,
-      exercise: { id: exerciseId },
+      planExerciseDay: {id: planExerciseDayId},
+      exercise,
       userId
     });
 
@@ -75,7 +78,7 @@ export class PlanExerciseService {
       exercise: exerciseRecord.exercise.name,
       sets: exerciseRecord.sets,
       reps: exerciseRecord.reps,
-      planExerciseDayId: exerciseRecord.planExerciseDay.id,
+      planExerciseDayId: exerciseRecord?.planExerciseDay?.id,
     });
   }
 }

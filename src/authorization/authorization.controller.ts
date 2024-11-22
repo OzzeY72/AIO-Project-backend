@@ -1,18 +1,13 @@
 import { Controller, Get, Query, Res, Post, Body, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthorizationService } from './services/authorization.service';
-import { OAuthFactory } from './factories/oauth.factory';
-import { UserService } from '@/user/user.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ERROR_MESSAGES } from '@/common/error-messages';
 
 @ApiTags('Authorization')
 @Controller('oauth')
 export class AuthorizationController {
     constructor(
         private readonly authorizationService: AuthorizationService,
-        private readonly userService: UserService,
-        private readonly oauthFactory: OAuthFactory,
     ) {}
 
     @Get('authorize')
@@ -46,33 +41,20 @@ export class AuthorizationController {
         @Res() res: Response
     ) {
         try {
-            if(grantType !== 'authorization_code') return res.status(HttpStatus.BAD_REQUEST).json({ error: ERROR_MESSAGES.BAD_GRANT_TYPE });
-            this.authorizationService.ClientCredentialsVerify(clientId, clientSecret);
-
-            //Request OpenId from Provider
-            const authProvider = this.oauthFactory.getProvider(provider);
-            const openId = await authProvider.getToken(code);
-
-            //Create new User ?
-            let user = await this.userService.FindUser({provider: provider, providerId: openId.providerId});
-            if ( !user ) user = await this.userService.CreateUser(openId, provider);
-            
-            //Issue new token
-            const accessToken = this.authorizationService.generateAccessToken(user.userId);
-            const idToken = this.authorizationService.generateIdToken(user.userId, user.name, user.email);
-
-            console.log(accessToken);
-
-            res.json({
-                access_token: accessToken,
-                id_token: idToken,
-                expires_in: 3600,
-                token_type: 'Bearer',
+            const tokens = await this.authorizationService.exchangeToken({
+                grantType,
+                code,
+                redirectUri,
+                clientId,
+                clientSecret,
+                provider,
             });
-
+            res.json(tokens);
         } catch (error) {
-            console.log(error.message);
-            return res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
+            console.error(error.message);
+            return res
+                .status(error.status || HttpStatus.INTERNAL_SERVER_ERROR)
+                .json({ error: error.message });
         }
     }
 }

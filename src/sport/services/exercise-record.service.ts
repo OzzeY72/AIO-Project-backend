@@ -59,12 +59,13 @@ export class ExerciseRecordService {
   }
 
   async update(id: number, userId: string, updateExerciseRecordDto: UpdateExerciseRecordDto): Promise<ResponseExerciseRecordDto> {
-    const { exercise, exerciseDayId, weight, reps } = updateExerciseRecordDto;
+    const { exercise: exerciseName, exerciseDayId, weight, reps } = updateExerciseRecordDto;
 
+    const exercise = await this.exerciseService.findOneByName(exerciseName, userId);
     await this.exerciseRecordRepository.update(id, {
       weight,
       reps,
-      exercise: { name: exercise },
+      exercise: exercise,
       //exerciseDay: { id: exerciseDayId },
       userId
     });

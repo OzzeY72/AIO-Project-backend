@@ -168,7 +168,7 @@ export class SportController {
     @Res() res: Response
   ) {
     const userId = req.user.sub; 
-
+    console.log(id, updateExerciseRecordDto);
     return handleControllerError(res, async () => 
       res.status(HttpStatus.OK).json(await this.sportService.updateExerciseRecord(id, userId, updateExerciseRecordDto))
     );
@@ -202,7 +202,7 @@ export class SportController {
   @ApiResponse({ status: 201, description: 'The plan exercise has been successfully created.', type: ResponsePlanExerciseDto })
   async createPlanExercise(@Req() req: any, @Body() createPlanExerciseDto: CreatePlanExerciseDto, @Res() res: Response) {
     const userId = req.user.sub;
-
+    console.log(createPlanExerciseDto);
     return handleControllerError(res, async () => 
       res.status(HttpStatus.CREATED).json(await this.sportService.createPlanExercise(userId, createPlanExerciseDto))
     );
