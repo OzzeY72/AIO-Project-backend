@@ -10,7 +10,6 @@ import { CreateExerciseDayDto, UpdateExerciseDayDto } from './dto';
 import { CreateExerciseRecordDto, UpdateExerciseRecordDto } from './dto';
 import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from './dto';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from './dto';
-import { ResponseAnalysisDayDto } from './dto'; 
 import { ExerciseAnalysisService } from './services/exercise-analysis.service';
 import { toClearDate } from '@/common/utils';
 
@@ -24,7 +23,7 @@ export class SportService {
     private readonly planExerciseDayService: PlanExerciseDayService,
     private readonly exerciseAnalysisService: ExerciseAnalysisService
   ) {}
-
+  /*
   async analyseExerciseDay(userId: string, weekDay: number): Promise<ResponseAnalysisDayDto> {
     const planDay = await this.planExerciseDayService.getPlanDayByWeekDay(weekDay, userId);
 
@@ -32,7 +31,7 @@ export class SportService {
       planExercises: await this.exerciseAnalysisService.calculateAnalysedSets(planDay),
       weekDay
     });
-  }
+  }*/
 
   // Exercise Management
   async getAllExercises(userId: string, options?: Partial<ExerciseEntity>) {

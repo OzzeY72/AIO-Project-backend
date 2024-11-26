@@ -2,17 +2,18 @@ import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, UseGu
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/authorization';
 import { SportService } from './sport.service';
-import { CreateExerciseDto, ResponseAnalysisDayDto, UpdateExerciseDto } from './dto';
+import { CreateExerciseDto, UpdateExerciseDto } from './dto';
 import { CreateExerciseDayDto, UpdateExerciseDayDto } from './dto';
 import { CreateExerciseRecordDto, UpdateExerciseRecordDto } from './dto';
 import { CreatePlanExerciseDto, UpdatePlanExerciseDto } from './dto';
 import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from './dto';
-import { ResponseAnalysisExerciseDto, ResponsePlanExerciseDto } from './dto';
+import { ResponsePlanExerciseDto } from './dto';
 import { Response } from 'express';
 import { handleControllerError } from '@/common/utils';
 import { ExerciseDay, ExerciseEntity } from './entities';
 import { ResponseExerciseDay } from './dto'; 
-import { RequestAnalysisExerciseDto, ResponseExerciseRecordDto } from './dto';
+import { ResponseExerciseRecordDto } from './dto';
+import { ResponsePlanExerciseDayDto } from './dto';
 
 @ApiTags('Sport')
 @ApiBearerAuth()
@@ -20,7 +21,7 @@ import { RequestAnalysisExerciseDto, ResponseExerciseRecordDto } from './dto';
 @UseGuards(JwtAuthGuard)
 export class SportController {
   constructor(private readonly sportService: SportService) {}
-
+  /*
   @Get('analyse')
   @ApiOperation({ summary: 'Analyse exercise weight for day' })
   @ApiResponse({ status: 200, description: 'Return analysed day', type: ResponseAnalysisDayDto })
@@ -34,7 +35,7 @@ export class SportController {
       res.status(HttpStatus.OK).json(await this.sportService.analyseExerciseDay(userId, query.weekDay))
     );
   }
-
+  */
   // 1. CRUD для Exercise
   @Get('exercises')
   @ApiOperation({ summary: 'Get all exercises' })
@@ -229,7 +230,6 @@ export class SportController {
   @ApiResponse({ status: 200, description: 'The plan exercise has been successfully deleted.' })
   async deletePlanExercise(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
     const userId = req.user.sub;
-
     return handleControllerError(res, async () => 
       res.status(HttpStatus.OK).json(await this.sportService.deletePlanExercise(id, userId))
     );
@@ -238,7 +238,7 @@ export class SportController {
   // 5. CRUD для Plan Exercise Day
   @Get('plan-exercise-days')
   @ApiOperation({ summary: 'Get all plan exercise days' })
-  @ApiResponse({ status: 200, description: 'Return all plan exercise days.', type: [CreatePlanExerciseDayDto] })
+  @ApiResponse({ status: 200, description: 'Return all plan exercise days.', type: [ResponsePlanExerciseDayDto] })
   async getAllPlanExerciseDays(@Req() req: any, @Res() res: Response) {
     const userId = req.user.sub;
 

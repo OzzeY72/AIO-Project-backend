@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, Unique } from 'typeorm';
 import { ExerciseEntity } from './exercise.entity';
+import { PlannedExerciseSet } from './plan-exercise-set.entity';
 import { PlanExerciseDay } from './plan-exercise-day.entity';
 
 @Entity('plan_exercise')
@@ -10,18 +11,16 @@ export class PlanExercise {
   @Column({ type: 'varchar', length: 255 })
   userId: string;
 
+  @OneToMany(() => PlannedExerciseSet, (set) => set.plannedExercise, { cascade: true })
+  sets: PlannedExerciseSet[];
+
   @ManyToOne(() => ExerciseEntity, (exercise) => exercise.planExercises)
+  @JoinColumn({ name: 'exerciseId' })
   exercise: ExerciseEntity;
 
-  @ManyToOne(() => PlanExerciseDay, (planDay) => planDay.planExercises)
+  @ManyToOne(() => PlanExerciseDay, (planExerciseDay) => planExerciseDay.planExercises)
+  @JoinColumn({ name: 'planExerciseDayId' })
   planExerciseDay: PlanExerciseDay;
-
-  @Column({ type: 'int' })
-  sets: number;
-
-  @Column({ type: 'int' })
-  reps: number;
-
-  @Column({ type: 'int', nullable: true })
-  weight: number;
 }
+
+

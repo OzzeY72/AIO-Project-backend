@@ -10,8 +10,8 @@ export class PlanExerciseDay {
   @Column({ type: 'varchar', length: 255 })
   userId: string;
 
-  @Column({ type: 'int' })
-  weekDay: number;
+  @Column()
+  weekDay: string;
 
   @OneToMany(() => PlanExercise, (planExercise) => planExercise.planExerciseDay)
   planExercises: PlanExercise[];

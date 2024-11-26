@@ -1,18 +1,27 @@
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreatePlanExerciseDto {
-  @ApiProperty({ description: 'ID of the associated exercise' })
+export class CreatePlanExerciseSetDto {
+  @ApiProperty({ description: 'Weight' })
   @IsNumber()
-  exerciseId: number;
-
-  @ApiProperty({ description: 'Number of sets to perform' })
-  @IsNumber()
-  sets: number;
+  weight: number;
 
   @ApiProperty({ description: 'Number of repetitions per set' })
   @IsNumber()
   reps: number;
+
+  @ApiProperty({ description: 'ID of exercise which own this set' })
+  @IsNumber()
+  plannedExerciseId: number;
+}
+
+export class CreatePlanExerciseDto {
+  @ApiProperty({ description: 'Set of planexercise' })
+  sets: CreatePlanExerciseSetDto[];
+
+  @ApiProperty({ description: 'Name of the associated exercise' })
+  @IsString()
+  exercise: string;
 
   @ApiProperty({ description: 'ID of the associated plan day' })
   @IsNumber()

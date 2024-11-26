@@ -2,14 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { ExerciseRecordService, PlanExerciseService } from './';
 import { extrapolate } from '@/common/utils';
 import { PlanExercise, PlanExerciseDay } from "../entities";
-import { ResponseAnalysisExerciseDto } from "../dto";
+//import { ResponseAnalysisExerciseDto } from "../dto";
 
 @Injectable()
 export class ExerciseAnalysisService {
   constructor(
     private readonly exerciseRecordService: ExerciseRecordService,
   ) {}
-
+  /*
   async calculateAnalysedSets (planDay: PlanExerciseDay,) {
     const arr = [];
     for (const planExercise of planDay.planExercises) {
@@ -77,5 +77,5 @@ export class ExerciseAnalysisService {
     }
     console.log(result);
     return result;
-  }
+  }*/
 }

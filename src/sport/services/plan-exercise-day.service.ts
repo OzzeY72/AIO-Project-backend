@@ -16,8 +16,8 @@ export class PlanExerciseDayService {
 
   async findAll(userId: string, options?: Partial<PlanExerciseDay> | null): Promise<PlanExerciseDay[]> {
     return options 
-      ? await this.planExerciseDayRepository.find({ relations: ['planExercises', 'planExercises.exercise'], where: {...options, userId}})
-      : await this.planExerciseDayRepository.find({ relations: ['planExercises', 'planExercises.exercise'], where: {userId}})
+      ? await this.planExerciseDayRepository.find({ relations: ['planExercises', 'planExercises.exercise', 'planExercises.sets'], where: {...options, userId}})
+      : await this.planExerciseDayRepository.find({ relations: ['planExercises', 'planExercises.exercise', 'planExercises.sets'], where: {userId}})
   }
 
   async findOne(id: number, userId: string): Promise<PlanExerciseDay> {
@@ -27,7 +27,7 @@ export class PlanExerciseDayService {
     });
   }
 
-  async getPlanDayByWeekDay(weekDay: number, userId: string): Promise<PlanExerciseDay> {
+  async getPlanDayByWeekDay(weekDay: string, userId: string): Promise<PlanExerciseDay> {
     const records = await this.planExerciseDayRepository.findOne({ 
       relations: ['planExercises', 'planExercises.exercise' ],
       where: {

@@ -12,7 +12,7 @@ import { BudgetModule } from '@/budget/budget.module';
 import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
 import { JwtAuthModule } from './jwtauth.module';
 import { SportModule } from '@/sport/sport.module';
-import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay } from '@/sport/entities';
+import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet } from '@/sport/entities';
 
 @Module({
   imports: [
@@ -35,6 +35,7 @@ import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, Ex
           Health, HealthRecord, HealthStat, HealthRegister,
           ProductEntity, TagEntity, CategoryEntity,
           ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay,
+          PlannedExerciseSet,
         ],
         synchronize: true,
       }),
