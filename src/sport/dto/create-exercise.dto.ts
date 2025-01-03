@@ -5,4 +5,7 @@ export class CreateExerciseDto {
   @ApiProperty({ description: 'Name of the exercise' })
   @IsString()
   name: string;
+
+  @ApiProperty({ description: 'Muscle group' })
+  muscleGroups: string[];
 }

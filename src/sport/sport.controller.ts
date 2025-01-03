@@ -14,13 +14,18 @@ import { ExerciseDay, ExerciseEntity } from './entities';
 import { ResponseExerciseDay } from './dto'; 
 import { ResponseExerciseRecordDto } from './dto';
 import { ResponsePlanExerciseDayDto } from './dto';
+import { CreateMuscleGroupDto, UpdateMuscleGroupDto } from './dto';
+import { MuscleGroupService } from './services';
 
 @ApiTags('Sport')
 @ApiBearerAuth()
 @Controller('sport')
 @UseGuards(JwtAuthGuard)
 export class SportController {
-  constructor(private readonly sportService: SportService) {}
+  constructor(
+    private readonly sportService: SportService,
+    private readonly muscleGroupService: MuscleGroupService
+  ) {}
   /*
   @Get('analyse')
   @ApiOperation({ summary: 'Analyse exercise weight for day' })
@@ -282,6 +287,51 @@ export class SportController {
 
     return handleControllerError(res, async () => 
       res.status(HttpStatus.OK).json(await this.sportService.deletePlanExerciseDay(id, userId))
+    );
+  }
+  // 6. CRUD для Muscle Group
+  // Получить все группы мышц
+  @Get()
+  @ApiOperation({ summary: 'Get all muscle groups' })
+  @ApiResponse({ status: 200, description: 'Return all muscle groups.', type: [CreateMuscleGroupDto] })
+  async getAllMuscleGroups(@Req() req: any, @Res() res: Response) {
+    return handleControllerError(res, async () =>
+      res.status(HttpStatus.OK).json(await this.muscleGroupService.findAll())
+    );
+  }
+
+  // Создать новую группу мышц
+  @Post()
+  @ApiOperation({ summary: 'Create a new muscle group' })
+  @ApiResponse({ status: 201, description: 'The muscle group has been successfully created.', type: CreateMuscleGroupDto })
+  async createMuscleGroup(@Req() req: any, @Body() createMuscleGroupDto: CreateMuscleGroupDto, @Res() res: Response) {
+    return handleControllerError(res, async () =>
+      res.status(HttpStatus.CREATED).json(await this.muscleGroupService.create(createMuscleGroupDto))
+    );
+  }
+
+  // Обновить существующую группу мышц
+  @Put(':id')
+  @ApiOperation({ summary: 'Update an existing muscle group' })
+  @ApiResponse({ status: 200, description: 'The muscle group has been successfully updated.', type: UpdateMuscleGroupDto })
+  async updateMuscleGroup(
+    @Req() req: any,
+    @Param('id') id: number,
+    @Body() updateMuscleGroupDto: UpdateMuscleGroupDto,
+    @Res() res: Response
+  ) {
+    return handleControllerError(res, async () =>
+      res.status(HttpStatus.OK).json(await this.muscleGroupService.update(id, updateMuscleGroupDto))
+    );
+  }
+
+  // Удалить группу мышц
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a muscle group' })
+  @ApiResponse({ status: 200, description: 'The muscle group has been successfully deleted.' })
+  async deleteMuscleGroup(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
+    return handleControllerError(res, async () =>
+      res.status(HttpStatus.OK).json(await this.muscleGroupService.delete(id))
     );
   }
 }

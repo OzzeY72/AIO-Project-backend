@@ -4,15 +4,15 @@ import { AuthorizationModule } from '@/authorization';
 import { SportService } from './sport.service';
 import { SportController } from './sport.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet } from './entities';
-import { ExerciseDayService, ExerciseRecordService, ExerciseService, PlanExerciseDayService, PlanExerciseService, PlanExerciseSetService } from './services';
+import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet, MuscleGroupEntity } from './entities';
+import { ExerciseDayService, ExerciseRecordService, ExerciseService, MuscleGroupService, PlanExerciseDayService, PlanExerciseService, PlanExerciseSetService } from './services';
 import { ExerciseAnalysisService } from './services'; 
 
 @Module({
   imports: [
     AuthorizationModule,
     JwtAuthModule,
-    TypeOrmModule.forFeature([ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet]),
+    TypeOrmModule.forFeature([ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet, MuscleGroupEntity]),
   ],
   controllers: [SportController],
   providers: [
@@ -24,6 +24,7 @@ import { ExerciseAnalysisService } from './services';
     PlanExerciseDayService,
     ExerciseAnalysisService,
     PlanExerciseSetService,
+    MuscleGroupService,
   ],
 })
 export class SportModule {}

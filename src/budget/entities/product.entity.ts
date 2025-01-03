@@ -16,7 +16,10 @@ export class ProductEntity {
     //@Column('date',{ nullable: false})
     date: Date;
 
-    @ManyToMany(() => TagEntity, (tag) => tag.products)
+    @ManyToMany(() => TagEntity, (tag) => tag.products, { 
+        cascade: true, 
+        onDelete: "CASCADE" 
+    })
     tags: TagEntity[];
 
     @Column({ name: "userId", nullable: false })

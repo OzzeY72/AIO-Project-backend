@@ -82,7 +82,7 @@ export class ProductRepository {
             name: product?.name,
             price: product?.price,
             date: product?.date,
-            tags: product?.tags.map(tagId => ({ id: tagId })),
+            //tags: product?.tags?.map(tagId => ({ id: tagId })),
         });
         await this.repository.update(product.id, productRecord);
         return await this.repository.findOne({where: {id: product.id}});

@@ -13,3 +13,5 @@ export * from './response-plan-exercise';
 export * from './response-exercise-day.dto';
 export * from './request-exercise-record.dto';
 export * from './response-plan-exercise-day.dto';
+export * from './create-muscle-group.dto';
+export * from './update-muscle-group.dto';

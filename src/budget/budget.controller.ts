@@ -222,6 +222,7 @@ export class BudgetController {
         @Res() res: Response
     ): Promise<ProductUpdateDtoRequest> {
         const userId = request.user.sub; 
+        console.log(product, "FFFFFF");
         return handleControllerError(res, async () => 
             res.status(HttpStatus.OK).json(await this.budgetService.updateProduct(userId, product))
         );

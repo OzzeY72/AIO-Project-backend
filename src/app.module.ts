@@ -13,6 +13,7 @@ import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
 import { JwtAuthModule } from './jwtauth.module';
 import { SportModule } from '@/sport/sport.module';
 import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet } from '@/sport/entities';
+import { MuscleGroupEntity } from './sport/entities/muscle-group.entity';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, Ex
           Health, HealthRecord, HealthStat, HealthRegister,
           ProductEntity, TagEntity, CategoryEntity,
           ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay,
-          PlannedExerciseSet,
+          PlannedExerciseSet, MuscleGroupEntity
         ],
         synchronize: true,
       }),

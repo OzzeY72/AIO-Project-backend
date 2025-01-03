@@ -15,6 +15,6 @@ export class CategoryDtoRequest {
 }
 
 export const toCategoryDtoResponse = (category: CategoryEntity) => ({
-    id: category.id,
-    name: category.name,
+    id: category?.id,
+    name: category?.name,
 });

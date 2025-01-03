@@ -75,9 +75,9 @@ export class ProductGetDtoRequest {
 
 
 export const toProductDtoResponse = (product: ProductEntity): ProductDtoResponse => ({
-    id: product.id,
+    id: product?.id,
     name: product.name,
     price: product.price,
     date: product.date,
-    tags: product.tags.map(toTagDtoResponse),
+    tags: product.tags?.map(toTagDtoResponse),
 });
