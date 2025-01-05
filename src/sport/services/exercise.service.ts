@@ -15,23 +15,23 @@ export class ExerciseService {
 
   async findAll(userId: string, options?: Partial<ExerciseEntity> | null): Promise<ExerciseEntity[]> {
     return options 
-      ? await this.exerciseRepository.find({where: {...options, userId}}) 
-      : await this.exerciseRepository.find({where: {userId}});
+      ? await this.exerciseRepository.find({where: {...options, userId},relations: ['muscleGroups']}) 
+      : await this.exerciseRepository.find({where: {userId},relations: ['muscleGroups']});
   }
 
   async findOne(id: number, userId: string): Promise<ExerciseEntity> {
-    return await this.exerciseRepository.findOne({ where: { id, userId } });
+    return await this.exerciseRepository.findOne({ where: { id, userId }, relations: ['muscleGroups'] });
   }
 
   async findOneByName(exercise: string, userId: string) {
-    return await this.exerciseRepository.findOne({where: {name: exercise, userId}});
+    return await this.exerciseRepository.findOne({where: {name: exercise, userId}, relations: ['muscleGroups']});
   }
 
   async create(userId: string, createExerciseDto: CreateExerciseDto): Promise<ExerciseEntity> {
     const {name, muscleGroups} = createExerciseDto;
 
     var muscleGroupEntities = await Promise.all(muscleGroups.map(muscleGroup => 
-      this.muscleGroupService.getOrCreateMuscleGroup(muscleGroup)
+      this.muscleGroupService.findOneByName(muscleGroup)
     ));
 
     const exercise = this.exerciseRepository.create({
@@ -39,6 +39,8 @@ export class ExerciseService {
       muscleGroups: muscleGroupEntities,
       userId
     });
+
+    exercise.muscleGroups = muscleGroupEntities;
     return await this.exerciseRepository.save(exercise);
   }
 
@@ -46,15 +48,22 @@ export class ExerciseService {
     const {name, muscleGroups} = updateExerciseDto;
 
     var muscleGroupEntities = await Promise.all(muscleGroups.map(muscleGroup => 
-      this.muscleGroupService.getOrCreateMuscleGroup(muscleGroup)
+      this.muscleGroupService.findOneByName(muscleGroup)
     ));
 
-    await this.exerciseRepository.update(id, {
-      name,
-      muscleGroups: muscleGroupEntities,
-      userId
+    const exercise = await this.exerciseRepository.findOne({
+      where: { id, userId },
+      relations: ['muscleGroups'],
     });
-    return await this.findOne(id, userId);
+
+    if (!exercise) {
+      throw new Error(`Exercise with ID ${id} not found for user ${userId}`);
+    }
+
+    exercise.name = name;
+    exercise.muscleGroups = muscleGroupEntities;
+
+    return await this.exerciseRepository.save(exercise);
   }
 
   async delete(id: number, userId: string): Promise<void> {

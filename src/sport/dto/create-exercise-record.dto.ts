@@ -2,7 +2,7 @@ import { IsNumber, IsString, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateExerciseRecordDto {
-  @ApiProperty({ description: 'ID of the associated exercise' })
+  @ApiProperty({ description: 'Name of the associated exercise' })
   @IsString()
   exercise: string;
 

@@ -15,3 +15,8 @@ export * from './request-exercise-record.dto';
 export * from './response-plan-exercise-day.dto';
 export * from './create-muscle-group.dto';
 export * from './update-muscle-group.dto';
+export * from './request-period.dto';
+export * from './response-exercise-popularity.dto';
+export * from './response-reps-by-group.dto';
+export * from './request-day-tonnage.dto';
+export * from './response-day-tonnage.dto';

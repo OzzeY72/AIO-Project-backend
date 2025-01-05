@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { ExerciseDay } from '../entities';
 import { ExerciseRecordService } from './'; 
 import { CreateExerciseDayDto, ResponseExerciseDay, UpdateExerciseDayDto } from '../dto';
+import { FindOptionsWhere, FindOperator } from 'typeorm';
+import { toClearDate } from '@/common/utils';
 
 @Injectable()
 export class ExerciseDayService {
@@ -13,10 +15,29 @@ export class ExerciseDayService {
     private readonly exerciseRecordService: ExerciseRecordService,
   ) {}
 
-  async findAll(userId: string, options?: Partial<ExerciseDay> | null): Promise<ExerciseDay[]> {
-    return options 
-      ? await this.exerciseDayRepository.find({ relations: ['exerciseRecords', 'exerciseRecords.exercise'], where: {...options, userId} })
-      : await this.exerciseDayRepository.find({ relations: ['exerciseRecords', 'exerciseRecords.exercise'], where: {userId} });
+  async findAll(userId: string, options?: Partial<ExerciseDay> | null, date?: FindOperator<Date>, relations?: string[]): Promise<ExerciseDay[]> {
+    const whereOptions: FindOptionsWhere<ExerciseDay> = options ? { ...options, date, userId } : { date, userId };
+
+    return await this.exerciseDayRepository.find({
+      relations: relations ?? ['exerciseRecords', 'exerciseRecords.exercise', 'exerciseRecords.exercise.muscleGroups'],
+      where: whereOptions,
+    });
+  }
+
+  async findDayByExerciseName(userId: string, exerciseName: string, date?: FindOperator<Date>, relations?: string[]): Promise<ExerciseDay[]> {
+    const whereOptions: FindOptionsWhere<ExerciseDay> = { date, userId };
+
+    return await this.exerciseDayRepository.find({
+      relations: relations ?? ['exerciseRecords', 'exerciseRecords.exercise', 'exerciseRecords.exercise.muscleGroups'],
+      where: {
+        ...whereOptions,
+        exerciseRecords: {
+          exercise: {
+            name: exerciseName,
+          },
+        }
+      },
+    });
   }
 
   async findOne(id: number, userId: string): Promise<ExerciseDay> {
@@ -36,6 +57,7 @@ export class ExerciseDayService {
   async create(userId: string, createExerciseDayDto: CreateExerciseDayDto): Promise<ExerciseDay> {
     const exerciseDay = this.exerciseDayRepository.create({
       ...createExerciseDayDto,
+      date: toClearDate(createExerciseDayDto.date),
       userId
     });
     return await this.exerciseDayRepository.save(exerciseDay);

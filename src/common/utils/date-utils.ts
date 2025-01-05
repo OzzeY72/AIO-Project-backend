@@ -9,3 +9,27 @@ export const toClearDate = (date: string | Date) => {
   newDate.setHours(0, 0, 0, 0);
   return newDate;
 }
+
+export const convertToDays = (input) => {
+  const unit = input.slice(-1); // Последний символ - единица измерения
+  const value = parseInt(input.slice(0, -1)); // Числовая часть
+  const date = new Date();
+
+  switch (unit) {
+      case 'w': 
+        date.setDate(date.getDate() - value * 7);
+        break;
+      case 'd': 
+        date.setDate(date.getDate() - value);
+        break;
+      case 'y': 
+        date.setFullYear(date.getFullYear() - value);
+        break;
+      case 'm': 
+        date.setMonth(date.getMonth() - value);
+        break;
+      default: throw new Error('Unknown unit');
+  }
+
+  return date;
+}

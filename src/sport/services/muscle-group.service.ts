@@ -12,18 +12,6 @@ export class MuscleGroupService {
     private readonly muscleGroupRepository: Repository<MuscleGroupEntity>,
   ) {}
 
-  async getOrCreateMuscleGroup(name: string): Promise<MuscleGroupEntity> {
-    // Попробуем найти группу мышц по имени
-    let muscleGroup = await this.findOneByName(name);
-  
-    // Если группы не существует, создаём новую
-    if (!muscleGroup) {
-      muscleGroup = await this.create({ name });
-    }
-  
-    return muscleGroup;
-  }
-
   // Получить все группы мышц
   async findAll(): Promise<MuscleGroupEntity[]> {
     return await this.muscleGroupRepository.find();
@@ -31,14 +19,18 @@ export class MuscleGroupService {
 
   // Найти группу мышц по ID
   async findOne(id: number): Promise<MuscleGroupEntity> {
-    return await this.muscleGroupRepository.findOne({ where: { id } });
+    return await this.muscleGroupRepository.findOne({ where: { id }});
   }
 
   // Найти группу мышц по имени
-  async findOneByName(name: string): Promise<MuscleGroupEntity> {
-    return await this.muscleGroupRepository.findOne({ where: { name } });
-  }
+   async findOneByName (name: string): Promise<MuscleGroupEntity> {
+      const query = this.muscleGroupRepository.createQueryBuilder('muscleGroups')
+          .where('muscleGroups.name = :name', { name: name });
 
+      const result = await query.getOne();
+      console.log(result);
+      return result;
+  }
   // Создать новую группу мышц
   async create(createMuscleGroupDto: CreateMuscleGroupDto): Promise<MuscleGroupEntity> {
     const muscleGroup = this.muscleGroupRepository.create(createMuscleGroupDto);

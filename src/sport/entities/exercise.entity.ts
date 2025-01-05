@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique, ManyToOne, JoinTable, ManyToMany } from 'typeorm';
 import { MuscleGroupEntity } from './muscle-group.entity';
 import { ExerciseRecordEntity } from './exercise-record.entity';
 import { PlanExercise } from './plan-exercise.entity';
@@ -15,7 +15,7 @@ export class ExerciseEntity {
   @Column({ type: 'varchar', length: 255 })
   userId: string;
 
-  @ManyToMany(() => MuscleGroupEntity, (muscleGroup) => muscleGroup.exercises, { cascade: true })
+  @ManyToMany(() => MuscleGroupEntity, { cascade: true })
   @JoinTable({
     name: 'exercise_muscle_groups',
     joinColumn: { name: 'exercise_id', referencedColumnName: 'id' },

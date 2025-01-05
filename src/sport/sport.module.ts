@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet, MuscleGroupEntity } from './entities';
 import { ExerciseDayService, ExerciseRecordService, ExerciseService, MuscleGroupService, PlanExerciseDayService, PlanExerciseService, PlanExerciseSetService } from './services';
 import { ExerciseAnalysisService } from './services'; 
+import { SportGraphicsController } from './controllers/';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { ExerciseAnalysisService } from './services';
     JwtAuthModule,
     TypeOrmModule.forFeature([ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet, MuscleGroupEntity]),
   ],
-  controllers: [SportController],
+  controllers: [SportController, SportGraphicsController],
   providers: [
     SportService,
     ExerciseDayService,

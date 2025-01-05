@@ -291,7 +291,7 @@ export class SportController {
   }
   // 6. CRUD для Muscle Group
   // Получить все группы мышц
-  @Get()
+  @Get('muscle-group/')
   @ApiOperation({ summary: 'Get all muscle groups' })
   @ApiResponse({ status: 200, description: 'Return all muscle groups.', type: [CreateMuscleGroupDto] })
   async getAllMuscleGroups(@Req() req: any, @Res() res: Response) {
@@ -301,7 +301,7 @@ export class SportController {
   }
 
   // Создать новую группу мышц
-  @Post()
+  @Post('muscle-group/')
   @ApiOperation({ summary: 'Create a new muscle group' })
   @ApiResponse({ status: 201, description: 'The muscle group has been successfully created.', type: CreateMuscleGroupDto })
   async createMuscleGroup(@Req() req: any, @Body() createMuscleGroupDto: CreateMuscleGroupDto, @Res() res: Response) {
@@ -311,7 +311,7 @@ export class SportController {
   }
 
   // Обновить существующую группу мышц
-  @Put(':id')
+  @Put('muscle-group/:id')
   @ApiOperation({ summary: 'Update an existing muscle group' })
   @ApiResponse({ status: 200, description: 'The muscle group has been successfully updated.', type: UpdateMuscleGroupDto })
   async updateMuscleGroup(
@@ -326,7 +326,7 @@ export class SportController {
   }
 
   // Удалить группу мышц
-  @Delete(':id')
+  @Delete('muscle-group/:id')
   @ApiOperation({ summary: 'Delete a muscle group' })
   @ApiResponse({ status: 200, description: 'The muscle group has been successfully deleted.' })
   async deleteMuscleGroup(@Req() req: any, @Param('id') id: number, @Res() res: Response) {
