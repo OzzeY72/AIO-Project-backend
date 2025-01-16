@@ -30,9 +30,11 @@ export class ExerciseService {
   async create(userId: string, createExerciseDto: CreateExerciseDto): Promise<ExerciseEntity> {
     const {name, muscleGroups} = createExerciseDto;
 
-    var muscleGroupEntities = await Promise.all(muscleGroups.map(muscleGroup => 
-      this.muscleGroupService.findOneByName(muscleGroup)
-    ));
+    var muscleGroupEntities = await Promise.all(muscleGroups.map(async (muscleGroup) => {
+      const res = await this.muscleGroupService.findOneByName(muscleGroup); // Ждем результата
+      return res !== null ? res : await this.muscleGroupService.create({ name: muscleGroup }); // Создаем, если не найдено
+    }));
+    
 
     const exercise = this.exerciseRepository.create({
       name,

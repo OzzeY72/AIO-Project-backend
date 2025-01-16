@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlanExerciseDay } from '../entities';
 import { PlanExerciseService } from './plan-exercise.service';
-import { CreatePlanExerciseDayDto, UpdatePlanExerciseDayDto } from '../dto';
+import { CreatePlanExerciseDayDto, ResponsePlanExerciseDayDto, UpdatePlanExerciseDayDto } from '../dto';
 import { groupBy } from '@/common/utils';
 
 @Injectable()
@@ -59,4 +59,11 @@ export class PlanExerciseDayService {
   async delete(id: number, userId: string): Promise<void> {
     await this.planExerciseDayRepository.delete({id, userId});
   }
+
+  toResponseExerciseDayDto(planDay: PlanExerciseDay): ResponsePlanExerciseDayDto {
+      return ({
+        ...planDay,
+        planExercises: planDay.planExercises.map((record) => this.planExerciseService.toResponsePlanExercise(record))
+      });
+    } 
 }

@@ -115,7 +115,8 @@ export class SportService {
 
   // Plan Exercise Day Management
   async getAllPlanExerciseDays(userId: string, options?: Partial<PlanExercise>) {
-    return await this.planExerciseDayService.findAll(userId, options);
+    const res = await this.planExerciseDayService.findAll(userId, options);
+    return res.map(day => this.planExerciseDayService.toResponseExerciseDayDto(day));
   }
   
   async createPlanExerciseDay(userId: string, createPlanExerciseDayDto: CreatePlanExerciseDayDto) {

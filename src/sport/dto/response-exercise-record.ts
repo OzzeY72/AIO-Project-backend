@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateExerciseDto } from './create-exercise.dto';
+import { ExerciseEntity } from '../entities';
 
 export class ResponseExerciseRecordDto {
   @ApiProperty({ description: 'ID of ExerciseRecord' })
   id: number;
 
-  @ApiProperty({ description: 'Exercise name' })
-  exercise: string;
+  @ApiProperty({ description: 'Exercise object' })
+  exercise: ExerciseEntity;
 
   @ApiProperty({ description: 'Weight used in the exercise' })
   weight: number;

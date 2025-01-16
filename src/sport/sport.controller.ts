@@ -59,9 +59,10 @@ export class SportController {
   async createExercise(@Req() req: any, @Body() createExerciseDto: CreateExerciseDto, @Res() res: Response) {
     const userId = req.user.sub;
 
-    return handleControllerError(res, async () => 
-      res.status(HttpStatus.CREATED).json(await this.sportService.createExercise(userId, createExerciseDto))
-    );
+    return handleControllerError(res, async () => {
+      const resp = await this.sportService.createExercise(userId, createExerciseDto);
+      res.status(HttpStatus.CREATED).json(resp)
+    });
   }
 
   @Put('exercises/:id')
@@ -106,11 +107,11 @@ export class SportController {
   @Post('exercise-days')
   @ApiOperation({ summary: 'Create a new exercise day' })
   @ApiResponse({ status: 201, description: 'The exercise day has been successfully created.', type: CreateExerciseDayDto })
-  async createExerciseDay(@Req() req: any, @Res() res: Response) {
+  async createExerciseDay(@Req() req: any,@Body() createExerciseDayDto: CreateExerciseDayDto, @Res() res: Response) {
     const userId = req.user.sub;
 
     return handleControllerError(res, async () => 
-      res.status(HttpStatus.CREATED).json(await this.sportService.createExerciseDay(userId, {date: new Date()}))
+      res.status(HttpStatus.CREATED).json(await this.sportService.createExerciseDay(userId, {date: createExerciseDayDto.date ? createExerciseDayDto.date : new Date()}))
     );
   }
 

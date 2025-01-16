@@ -20,3 +20,5 @@ export * from './response-exercise-popularity.dto';
 export * from './response-reps-by-group.dto';
 export * from './request-day-tonnage.dto';
 export * from './response-day-tonnage.dto';
+export * from './request-day-max-weight-reps.dto';
+export * from './response-day-max-weight-reps.dto';

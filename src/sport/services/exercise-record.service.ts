@@ -46,6 +46,8 @@ export class ExerciseRecordService {
   async create(userId: string, createExerciseRecordDto: CreateExerciseRecordDto): Promise<ResponseExerciseRecordDto> {
     const { exercise, exerciseDayId } = createExerciseRecordDto;
     const exerciseEntity = await this.exerciseService.findOneByName(exercise, userId);
+    
+    console.log(createExerciseRecordDto);
 
     const exerciseRecord = this.exerciseRecordRepository.create({
       ...createExerciseRecordDto,
@@ -53,7 +55,7 @@ export class ExerciseRecordService {
       exerciseDay: { id: exerciseDayId },
       userId
     });
-    console.log(exerciseRecord);
+    //console.log(exerciseRecord);
     const res = await this.exerciseRecordRepository.save(exerciseRecord);
     return this.toResponseExerciseRecord(res);
   }
@@ -79,7 +81,7 @@ export class ExerciseRecordService {
   toResponseExerciseRecord(exerciseRecord: ExerciseRecordEntity): ResponseExerciseRecordDto {
     return ({
       ...exerciseRecord,
-      exercise: exerciseRecord.exercise.name,
+      exercise: exerciseRecord?.exercise,
       exerciseDayId: exerciseRecord?.exerciseDay?.id,
     });
   }

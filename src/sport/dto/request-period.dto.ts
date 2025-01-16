@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-type Duration = `${number}${'m' | 'y' | 'd' | 'w'}`;
-
 export class RequestPeriod {
-    @ApiProperty({ description: 'Period of time to build graphic' })
-    period: Duration;
+    @ApiProperty({ description: 'Start date of time to build graphic' })
+    start: Date;
+
+    @ApiProperty({ description: 'End date of time to build graphic' })
+    end?: Date;
 }

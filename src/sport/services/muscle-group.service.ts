@@ -34,6 +34,7 @@ export class MuscleGroupService {
   // Создать новую группу мышц
   async create(createMuscleGroupDto: CreateMuscleGroupDto): Promise<MuscleGroupEntity> {
     const muscleGroup = this.muscleGroupRepository.create(createMuscleGroupDto);
+    console.log("SUKA BLYAT CREATE")
     return await this.muscleGroupRepository.save(muscleGroup);
   }
 

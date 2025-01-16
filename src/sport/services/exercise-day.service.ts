@@ -55,6 +55,11 @@ export class ExerciseDayService {
   }
 
   async create(userId: string, createExerciseDayDto: CreateExerciseDayDto): Promise<ExerciseDay> {
+    const date = toClearDate(createExerciseDayDto.date);
+
+    const existExerciseDay = await this.findOneByDate(date, userId);
+    if(existExerciseDay) return existExerciseDay;
+
     const exerciseDay = this.exerciseDayRepository.create({
       ...createExerciseDayDto,
       date: toClearDate(createExerciseDayDto.date),

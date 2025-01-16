@@ -3,7 +3,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@ne
 import { JwtAuthGuard } from '@/authorization';
 import { Response } from 'express';
 import { handleControllerError } from '@/common/utils';
-import { ResponseExercisePopularity, RequestPeriod, ResponseRepsByGroup, RequestDayTonnage, ResponseDayTonnage } from '../dto/';
+import { ResponseExercisePopularity, RequestPeriod, ResponseRepsByGroup, RequestDayTonnage, ResponseDayTonnage, ResponseDayMaxWeight, RequestDayMaxWeightOnReps } from '../dto/';
 import { ExerciseAnalysisService } from '../services';
 
 @ApiTags('Sport graphics')
@@ -52,9 +52,29 @@ export class SportGraphicsController {
     @Res() res: Response) {
     const userId = req.user.sub;
 
+    console.log("Requested day-tonnage");
+
     return handleControllerError(res, async () => 
       res.status(HttpStatus.OK).json(await this.exerciseAnalysisService.dayTonnage(userId, query))
     );
   }
+  @Get('day-maxweight')
+  @ApiOperation({ summary: 'Calculate data to build day to max weight graphic of one exercise' })
+  @ApiResponse({ status: 200, description: 'Return data to build day to max weight graphic of one exercise', type: ResponseDayMaxWeight })
+  async dayMaxWeightOnReps(
+    @Req() req: any, 
+    @Query() query: RequestDayMaxWeightOnReps,
+    @Res() res: Response) {
+    const userId = req.user.sub;
+
+    console.log("Requested day-maxweight");
+
+    const result = await this.exerciseAnalysisService.dayMaxWeightOnReps(userId, query);
+    //console.log(result);
+    return handleControllerError(res, async () => 
+      res.status(HttpStatus.OK).json(result)
+    );
+  }
+
 
 }

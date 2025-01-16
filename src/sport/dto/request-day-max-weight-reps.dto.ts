@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RequestDayTonnage {
+export class RequestDayMaxWeightOnReps {
     @ApiProperty({ description: 'Start date of time to build graphic' })
     start: Date;
 
@@ -9,4 +9,7 @@ export class RequestDayTonnage {
 
     @ApiProperty({ description: 'Name of exercise to build graphic' })
     exercise: string;
+
+    @ApiProperty({ description: 'Number of reps which is enough to build graphic' })
+    reps?: number;
 }
