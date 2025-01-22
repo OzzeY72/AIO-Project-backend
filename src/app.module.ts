@@ -6,10 +6,6 @@ import { AppService } from '@/app.service';
 import { AuthorizationController, AuthorizationModule } from '@/authorization';
 import { UserModule } from '@/user';
 import { User } from '@/user/entities';
-import { HealthModule } from '@/health/health.module';
-import { Health, HealthRecord, HealthStat, HealthRegister} from '@/health/entities';
-import { BudgetModule } from '@/budget/budget.module';
-import { ProductEntity, TagEntity, CategoryEntity } from '@/budget/entities';
 import { JwtAuthModule } from './jwtauth.module';
 import { SportModule } from '@/sport/sport.module';
 import { ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay, PlannedExerciseSet } from '@/sport/entities';
@@ -33,8 +29,6 @@ import { MuscleGroupEntity } from './sport/entities/muscle-group.entity';
         database: configService.get<string>('DB_NAME'),
         entities: [
           User, 
-          Health, HealthRecord, HealthStat, HealthRegister,
-          ProductEntity, TagEntity, CategoryEntity,
           ExerciseEntity, ExerciseRecordEntity, PlanExercise, PlanExerciseDay, ExerciseDay,
           PlannedExerciseSet, MuscleGroupEntity
         ],
@@ -43,8 +37,6 @@ import { MuscleGroupEntity } from './sport/entities/muscle-group.entity';
       inject: [ConfigService],
     }),
     forwardRef(() => UserModule),
-    forwardRef(() => BudgetModule),
-    forwardRef(() => HealthModule),
     SportModule,
   ],
   controllers: [AppController, AuthorizationController],
