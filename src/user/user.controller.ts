@@ -1,13 +1,13 @@
-import { Controller, Get, Res, UseGuards, Req, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { Response } from 'express';
-import { JwtAuthGuard } from '../authorization';
+import { ERROR_MESSAGES } from '@/common/error-messages';
 import { UserService } from '@/user';
 import { UserResponseDto } from '@/user/dto';
-import { ERROR_MESSAGES } from '@/common/error-messages';
+import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @ApiTags('user')
 @Controller('user')
+//@UseGuards(JwtAuthGuard)
 export class UserController {
     constructor(
         private readonly userService: UserService,
@@ -15,7 +15,6 @@ export class UserController {
 
     @Get('info')
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Get user DTO' })
     @ApiResponse({ status: 200, description: 'UserResponseDto', type: UserResponseDto })
     async userInfo(

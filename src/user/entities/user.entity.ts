@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -7,6 +7,9 @@ export class User {
 
     @Column({ unique: true })
     email: string;
+
+    @Column({nullable: true})
+    password: string;
 
     @Column({ nullable: true })
     name: string;

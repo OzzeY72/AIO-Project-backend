@@ -1,11 +1,11 @@
-import { Controller, Get, Query, Res, Post, Body, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query, Res } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { AuthorizationService } from './services/authorization.service';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthorizationService } from '../services/authorization.service';
 
-@ApiTags('Authorization')
+@ApiTags('Authorization OAuth')
 @Controller('oauth')
-export class AuthorizationController {
+export class AuthorizationOAuthController {
     constructor(
         private readonly authorizationService: AuthorizationService,
     ) {}
